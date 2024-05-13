@@ -1,0 +1,9 @@
+﻿.idea/*
+.vs
+ExpensesManager.Server/bin
+ExpensesManager.Server/obj
+expensesmanager.client/node_modules
+expensesmanager.client/dist
+expensesmanager.client/obj
+expensesmanager.client/bin
+expensesmanager.client/.vscode
