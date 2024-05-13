@@ -1,3 +1,6 @@
+using ExpensesManager.Server.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +9,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
@@ -18,18 +23,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-var supabaseSettings = builder.Configuration.GetSection("Supabase");
-var url = supabaseSettings["Url"];
-var key = supabaseSettings["Key"];
-
-var options = new Supabase.SupabaseOptions
-{
-    AutoConnectRealtime = true
-};
-
-var supabase = new Supabase.Client(url, key, options);
-await supabase.InitializeAsync();
 
 
 app.UseHttpsRedirection();
