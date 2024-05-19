@@ -60,7 +60,10 @@ var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]);
 builder.Services.AddSingleton<JwtTokenGenerator>();
 
-// add services
+// add expense services
+builder.Services.AddScoped<ExpenseRepository>();
+builder.Services.AddScoped<ExpenseService>();
+builder.Services.AddScoped<ExpenseFacade>();
 
 // add category services
 builder.Services.AddScoped<CategoryRepository>();

@@ -6,7 +6,7 @@ using ExpensesManager.Server.Models;
 public class Income
 {
     [Key]
-    public int IncomeId { get; set; }
+    public int Id { get; set; }
 
     [Required]
     [Column(TypeName = "decimal(18, 2)")]

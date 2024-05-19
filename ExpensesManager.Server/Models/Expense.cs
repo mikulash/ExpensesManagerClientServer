@@ -6,7 +6,7 @@ namespace ExpensesManager.Server.Models;
 public class Expense
 {
     [Key]
-    public int ExpenseId { get; set; }
+    public int Id { get; set; }
 
     [Required]
     [Column(TypeName = "decimal(18, 2)")]
