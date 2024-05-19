@@ -31,4 +31,10 @@ public class CategoryController : ControllerBase
     {
         return Ok(new { Message = "This is protected data." });
     }
+
+    [HttpGet("GetAll")]
+    public IActionResult GetAll()
+    {
+        return Ok(new { Message = "This is protected data." });
+    }
 }
