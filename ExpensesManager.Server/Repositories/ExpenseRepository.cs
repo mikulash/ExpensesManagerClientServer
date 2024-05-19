@@ -20,13 +20,9 @@ public class ExpenseRepository(ApplicationDbContext context)
         // add or update expense
         var isExpensePresent = context.Expenses.Any(e => e.Id == expense.Id);
         if (isExpensePresent)
-        {
             context.Expenses.Update(expense);
-        }
         else
-        {
             context.Expenses.Add(expense);
-        }
 
         var changesSaved = context.SaveChanges() > 0;
         return changesSaved;
@@ -35,10 +31,7 @@ public class ExpenseRepository(ApplicationDbContext context)
     public bool DeleteExpense(int expenseId)
     {
         var expense = context.Expenses.FirstOrDefault(e => e.Id == expenseId);
-        if (expense == null)
-        {
-            return false;
-        }
+        if (expense == null) return false;
 
         context.Expenses.Remove(expense);
         var changesSaved = context.SaveChanges() > 0;

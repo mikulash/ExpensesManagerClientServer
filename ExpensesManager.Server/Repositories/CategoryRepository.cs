@@ -30,13 +30,9 @@ public class CategoryRepository(ApplicationDbContext context)
         // add or update category
         var isCategoryPresent = context.Categories.Any(c => c.Id == category.Id);
         if (isCategoryPresent)
-        {
             context.Categories.Update(category);
-        }
         else
-        {
             context.Categories.Add(category);
-        }
 
         var changesSaved = context.SaveChanges() > 0;
         return changesSaved;
@@ -45,10 +41,7 @@ public class CategoryRepository(ApplicationDbContext context)
     public bool DeleteCategory(int categoryId)
     {
         var category = context.Categories.FirstOrDefault(c => c.Id == categoryId);
-        if (category == null)
-        {
-            return false;
-        }
+        if (category == null) return false;
 
         context.Categories.Remove(category);
         var changesSaved = context.SaveChanges() > 0;
@@ -58,10 +51,7 @@ public class CategoryRepository(ApplicationDbContext context)
     public bool DeleteAllCategories(int userId)
     {
         var categories = context.Categories.Where(c => c.UserId == userId).ToList();
-        if (categories.Count == 0)
-        {
-            return false;
-        }
+        if (categories.Count == 0) return false;
 
         context.Categories.RemoveRange(categories);
         var changesSaved = context.SaveChanges() > 0;

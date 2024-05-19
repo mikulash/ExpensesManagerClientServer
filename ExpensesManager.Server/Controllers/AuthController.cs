@@ -9,9 +9,9 @@ namespace ExpensesManager.Server.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly SignInManager<IdentityUser> _signInManager;
     private readonly JwtTokenGenerator _jwtTokenGenerator;
+    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly UserManager<IdentityUser> _userManager;
 
     public AuthController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,
         JwtTokenGenerator jwtTokenGenerator)
@@ -27,10 +27,7 @@ public class AuthController : ControllerBase
         if (ModelState.IsValid)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-            {
-                return BadRequest(new { Success = false, Message = "Invalid login attempt" });
-            }
+            if (user == null) return BadRequest(new { Success = false, Message = "Invalid login attempt" });
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
             if (result.Succeeded)
@@ -51,10 +48,7 @@ public class AuthController : ControllerBase
         if (ModelState.IsValid)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-            {
-                return BadRequest(new { Success = false, Message = "Invalid login attempt" });
-            }
+            if (user == null) return BadRequest(new { Success = false, Message = "Invalid login attempt" });
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
             if (result.Succeeded)
@@ -73,9 +67,7 @@ public class AuthController : ControllerBase
     public IActionResult GetCurrentUser()
     {
         if (User.Identity is { IsAuthenticated: true })
-        {
             return Ok(new { Success = true, UserName = User.Identity.Name });
-        }
 
         return Unauthorized(new { Success = false, Message = "User is not authenticated" });
     }

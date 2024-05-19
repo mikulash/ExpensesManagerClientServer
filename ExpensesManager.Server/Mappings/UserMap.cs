@@ -1,10 +1,11 @@
 ﻿using ExpensesManager.Server.DTOs;
+using ExpensesManager.Server.Models;
 
 namespace ExpensesManager.Server.Mappings;
 
 public class UserMap
 {
-    public UserDto ToDto(Models.User user)
+    public UserDto ToDto(User user)
     {
         return new UserDto
         {
@@ -15,9 +16,9 @@ public class UserMap
         };
     }
 
-    public Models.User ToModel(UserDto userDto)
+    public User ToModel(UserDto userDto)
     {
-        return new Models.User
+        return new User
         {
             UserId = int.Parse(userDto.UserId),
             Username = userDto.Username,

@@ -11,10 +11,7 @@ public class IncomeFacade(IncomeService incomeService)
     {
         var retval = new FacadeResponse<List<Income>>();
         var incomes = incomeService.GetAllIncomesByUser(userId);
-        if (incomes.Count == 0)
-        {
-            return retval.SetNotFound("No incomes found.");
-        }
+        if (incomes.Count == 0) return retval.SetNotFound("No incomes found.");
 
         return retval.SetOk(incomes);
 
@@ -24,10 +21,7 @@ public class IncomeFacade(IncomeService incomeService)
     {
         var retval = new FacadeResponse<Income>();
         var income = incomeService.GetIncomeById(incomeId);
-        if (income == null)
-        {
-            return retval.SetNotFound("Income not found.");
-        }
+        if (income == null) return retval.SetNotFound("Income not found.");
 
         return retval.SetOk(income);
 
@@ -36,18 +30,12 @@ public class IncomeFacade(IncomeService incomeService)
     public FacadeResponse<bool> SetIncome(IncomeDto incomeDto)
     {
         var retval = new FacadeResponse<bool>();
-        if (incomeDto.UserId == 0)
-        {
-            return retval.SetBadRequest("User ID cannot be 0.");
-        }
+        if (incomeDto.UserId == 0) return retval.SetBadRequest("User ID cannot be 0.");
 
         var income = IncomeMapping.ToIncome(incomeDto);
 
         var result = incomeService.SetIncome(income);
-        if (!result)
-        {
-            return retval.SetError(500, "Failed to set income.");
-        }
+        if (!result) return retval.SetError(500, "Failed to set income.");
 
         return retval.SetOk(result);
     }
@@ -56,10 +44,7 @@ public class IncomeFacade(IncomeService incomeService)
     {
         var retval = new FacadeResponse<bool>();
         var result = incomeService.DeleteIncome(incomeId);
-        if (!result)
-        {
-            return retval.SetNotFound("Failed to delete income.");
-        }
+        if (!result) return retval.SetNotFound("Failed to delete income.");
 
         return retval.SetOk(result);
     }
@@ -68,10 +53,7 @@ public class IncomeFacade(IncomeService incomeService)
     {
         var retval = new FacadeResponse<bool>();
         var result = incomeService.DeleteAllIncomes(userId);
-        if (!result)
-        {
-            return retval.SetNotFound("Failed to delete incomes.");
-        }
+        if (!result) return retval.SetNotFound("Failed to delete incomes.");
 
         return retval.SetOk(result);
     }

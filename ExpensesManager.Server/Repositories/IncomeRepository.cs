@@ -14,18 +14,14 @@ public class IncomeRepository(ApplicationDbContext context)
         return context.Incomes.FirstOrDefault(i => i.Id == incomeId);
     }
 
-    public bool SetIncome( Income income)
+    public bool SetIncome(Income income)
     {
         // add or update income
         var isIncomePresent = context.Incomes.Any(i => i.Id == income.Id);
         if (isIncomePresent)
-        {
             context.Incomes.Update(income);
-        }
         else
-        {
             context.Incomes.Add(income);
-        }
 
         var changesSaved = context.SaveChanges() > 0;
         return changesSaved;
@@ -34,10 +30,7 @@ public class IncomeRepository(ApplicationDbContext context)
     public bool DeleteIncome(int incomeId)
     {
         var income = context.Incomes.FirstOrDefault(i => i.Id == incomeId);
-        if (income == null)
-        {
-            return false;
-        }
+        if (income == null) return false;
 
         context.Incomes.Remove(income);
         var changesSaved = context.SaveChanges() > 0;
@@ -51,5 +44,4 @@ public class IncomeRepository(ApplicationDbContext context)
         var changesSaved = context.SaveChanges() > 0;
         return changesSaved;
     }
-
 }

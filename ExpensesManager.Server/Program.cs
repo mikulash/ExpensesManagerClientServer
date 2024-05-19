@@ -54,8 +54,6 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-
-
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]);
 builder.Services.AddSingleton<JwtTokenGenerator>();
@@ -78,8 +76,6 @@ builder.Services.AddScoped<CategoryFacade>();
 // add user services
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<UserFacade>();
-
-
 
 builder.Services.AddAuthentication(options =>
     {

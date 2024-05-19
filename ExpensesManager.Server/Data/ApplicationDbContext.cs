@@ -1,6 +1,6 @@
 ﻿using ExpensesManager.Server.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpensesManager.Server.Data;
 

@@ -12,7 +12,7 @@ public class IncomeMapping
             Amount = income.Amount,
             Description = income.Description,
             Date = income.Date,
-            UserId = income.UserId,
+            UserId = income.UserId
         };
     }
 
@@ -24,7 +24,7 @@ public class IncomeMapping
             Amount = incomeDto.Amount,
             Description = incomeDto.Description,
             Date = incomeDto.Date,
-            UserId = incomeDto.UserId,
+            UserId = incomeDto.UserId
         };
     }
 }

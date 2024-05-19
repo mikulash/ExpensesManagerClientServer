@@ -24,9 +24,7 @@ public class FacadeResponse<T> where T : notnull
     public FacadeResponse<T> SetOk(int statusCode, T value)
     {
         if (statusCode is < 200 or >= 300)
-        {
             throw new ArgumentException("Status code must be between 200 and 299", nameof(statusCode));
-        }
         StatusCode = statusCode;
         Value = value;
         return this;

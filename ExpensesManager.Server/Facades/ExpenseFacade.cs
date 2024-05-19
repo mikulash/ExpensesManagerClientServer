@@ -11,22 +11,16 @@ public class ExpenseFacade(ExpenseService expenseService)
     {
         var retval = new FacadeResponse<List<Expense>>();
         var expenses = expenseService.GetAllExpensesByUser(userId);
-        if (expenses.Count == 0)
-        {
-            return retval.SetNotFound("No expenses found.");
-        }
+        if (expenses.Count == 0) return retval.SetNotFound("No expenses found.");
 
         return retval.SetOk(expenses);
     }
 
- public FacadeResponse<Expense> GetExpenseById(int expenseId)
+    public FacadeResponse<Expense> GetExpenseById(int expenseId)
     {
         var retval = new FacadeResponse<Expense>();
         var expense = expenseService.GetExpenseById(expenseId);
-        if (expense == null)
-        {
-            return retval.SetNotFound("Expense not found.");
-        }
+        if (expense == null) return retval.SetNotFound("Expense not found.");
 
         return retval.SetOk(expense);
     }
@@ -35,17 +29,11 @@ public class ExpenseFacade(ExpenseService expenseService)
     {
         var retval = new FacadeResponse<bool>();
 
-        if (expenseDto.UserId == 0)
-        {
-            return retval.SetBadRequest("User ID cannot be 0.");
-        }
+        if (expenseDto.UserId == 0) return retval.SetBadRequest("User ID cannot be 0.");
 
         var expense = ExpenseMapping.ToExpense(expenseDto);
         var result = expenseService.SetExpense(userId, expense);
-        if (!result)
-        {
-            return retval.SetError(500, "Failed to set expense.");
-        }
+        if (!result) return retval.SetError(500, "Failed to set expense.");
 
         return retval.SetOk(result);
     }
@@ -54,10 +42,7 @@ public class ExpenseFacade(ExpenseService expenseService)
     {
         var retval = new FacadeResponse<bool>();
         var result = expenseService.DeleteExpense(expenseId);
-        if (!result)
-        {
-            return retval.SetNotFound("Failed to delete expense.");
-        }
+        if (!result) return retval.SetNotFound("Failed to delete expense.");
 
         return retval.SetOk(result);
     }
@@ -66,10 +51,7 @@ public class ExpenseFacade(ExpenseService expenseService)
     {
         var retval = new FacadeResponse<bool>();
         var result = expenseService.DeleteAllExpenses(userId);
-        if (!result)
-        {
-            return retval.SetError(500, "Failed to delete all expenses.");
-        }
+        if (!result) return retval.SetError(500, "Failed to delete all expenses.");
 
         return retval.SetOk(result);
     }
@@ -78,10 +60,7 @@ public class ExpenseFacade(ExpenseService expenseService)
     {
         var retval = new FacadeResponse<List<Expense>>();
         var expenses = expenseService.GetExpensesByCategory(userId, categoryId);
-        if (expenses.Count == 0)
-        {
-            return retval.SetNotFound("No expenses found for the specified category.");
-        }
+        if (expenses.Count == 0) return retval.SetNotFound("No expenses found for the specified category.");
 
         return retval.SetOk(expenses);
     }
@@ -90,10 +69,7 @@ public class ExpenseFacade(ExpenseService expenseService)
     {
         var retval = new FacadeResponse<List<Expense>>();
         var expenses = expenseService.GetExpensesByDateRange(userId, startDate, endDate);
-        if (expenses.Count == 0)
-        {
-            return retval.SetNotFound("No expenses found in the specified date range.");
-        }
+        if (expenses.Count == 0) return retval.SetNotFound("No expenses found in the specified date range.");
 
         return retval.SetOk(expenses);
     }
@@ -102,12 +78,8 @@ public class ExpenseFacade(ExpenseService expenseService)
     {
         var retval = new FacadeResponse<List<Expense>>();
         var expenses = expenseService.GetExpensesByAmountRange(userId, minAmount, maxAmount);
-        if (expenses.Count == 0)
-        {
-            return retval.SetNotFound("No expenses found in the specified amount range.");
-        }
+        if (expenses.Count == 0) return retval.SetNotFound("No expenses found in the specified amount range.");
 
         return retval.SetOk(expenses);
     }
-
 }

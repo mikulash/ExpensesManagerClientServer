@@ -23,5 +23,4 @@ public class CategoryMapping
             UserId = categoryDto.UserId
         };
     }
-
 }

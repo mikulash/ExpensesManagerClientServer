@@ -15,7 +15,7 @@ public class ExpenseService(ExpenseRepository expenseRepository)
         return expenseRepository.GetExpenseById(expenseId);
     }
 
-    public bool SetExpense(int userId,Expense expense)
+    public bool SetExpense(int userId, Expense expense)
     {
         return expenseRepository.SetExpense(userId, expense);
     }
@@ -30,7 +30,7 @@ public class ExpenseService(ExpenseRepository expenseRepository)
         return expenseRepository.DeleteAllExpenses(userId);
     }
 
-    public List<Expense> GetExpensesByCategory(int userId,int categoryId)
+    public List<Expense> GetExpensesByCategory(int userId, int categoryId)
     {
         return expenseRepository.GetExpensesByCategory(userId, categoryId);
     }
@@ -44,5 +44,4 @@ public class ExpenseService(ExpenseRepository expenseRepository)
     {
         return expenseRepository.GetExpensesByAmountRange(userId, minAmount, maxAmount);
     }
-
 }
