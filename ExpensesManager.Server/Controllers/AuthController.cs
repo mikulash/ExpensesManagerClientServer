@@ -1,4 +1,5 @@
 ﻿using ExpensesManager.Server.Models;
+using ExpensesManager.Server.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +11,14 @@ public class AuthController : ControllerBase
 {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly JwtTokenGenerator _jwtTokenGenerator;
 
-    public AuthController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+    public AuthController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,
+        JwtTokenGenerator jwtTokenGenerator)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _jwtTokenGenerator = jwtTokenGenerator;
     }
 
     [HttpPost("register")]
@@ -22,19 +26,22 @@ public class AuthController : ControllerBase
     {
         if (ModelState.IsValid)
         {
-            if(model.Password != model.ConfirmPassword)
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
             {
-                return BadRequest(new { Success = false, Message = "Passwords do not match" });
+                return BadRequest(new { Success = false, Message = "Invalid login attempt" });
             }
 
-            var user = new IdentityUser { UserName = model.Email, Email = model.Email };
-            var result = await _userManager.CreateAsync(user, model.Password);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+            if (result.Succeeded)
+            {
+                var token = _jwtTokenGenerator.GenerateToken(user);
+                return Ok(new { Success = true, Token = token, Message = "Login successful" });
+            }
 
-            if (!result.Succeeded) return BadRequest(result.Errors);
-
-            await _signInManager.SignInAsync(user, isPersistent: false);
-            return Ok(new { Success = true, Message = "Registration successful" });
+            return BadRequest(new { Success = false, Message = "Invalid login attempt" });
         }
+
         return BadRequest(ModelState);
     }
 
@@ -43,14 +50,34 @@ public class AuthController : ControllerBase
     {
         if (ModelState.IsValid)
         {
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return BadRequest(new { Success = false, Message = "Invalid login attempt" });
+            }
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
             if (result.Succeeded)
             {
-                return Ok(new { Success = true, Message = "Login successful" });
+                var token = _jwtTokenGenerator.GenerateToken(user);
+                return Ok(new { Success = true, Token = token, Message = "Login successful" });
             }
+
             return BadRequest(new { Success = false, Message = "Invalid login attempt" });
         }
+
         return BadRequest(ModelState);
+    }
+
+    [HttpGet("currentuser")]
+    public IActionResult GetCurrentUser()
+    {
+        if (User.Identity is { IsAuthenticated: true })
+        {
+            return Ok(new { Success = true, UserName = User.Identity.Name });
+        }
+
+        return Unauthorized(new { Success = false, Message = "User is not authenticated" });
     }
 
     [HttpPost("logout")]
