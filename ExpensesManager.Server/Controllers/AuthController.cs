@@ -22,14 +22,18 @@ public class AuthController : ControllerBase
     {
         if (ModelState.IsValid)
         {
+            if(model.Password != model.ConfirmPassword)
+            {
+                return BadRequest(new { Success = false, Message = "Passwords do not match" });
+            }
+
             var user = new IdentityUser { UserName = model.Email, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                return Ok(new { Success = true, Message = "Registration successful" });
-            }
-            return BadRequest(result.Errors);
+
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            return Ok(new { Success = true, Message = "Registration successful" });
         }
         return BadRequest(ModelState);
     }
