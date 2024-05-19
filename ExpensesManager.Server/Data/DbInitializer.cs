@@ -14,9 +14,9 @@ public class DbInitializer
         }
         // Seed Categories
         context.Categories.AddRange(
-            new Category { Name = "Food", CategoryId = 1},
-            new Category { Name = "Utilities", CategoryId = 2},
-            new Category { Name = "Salary", CategoryId = 3}
+            new Category { Name = "Food", Id = 1},
+            new Category { Name = "Utilities", Id = 2},
+            new Category { Name = "Salary", Id = 3}
         );
 
         context.SaveChanges();
