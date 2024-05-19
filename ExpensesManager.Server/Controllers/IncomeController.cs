@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,13 +8,13 @@ namespace ExpensesManager.Server.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class ExpenseController : ControllerBase
+public class IncomeController : ControllerBase
 {
     [HttpGet]
     public IActionResult Get(int id)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        return Ok(new { Message = "This is protected data.", UserId = userId });
+        var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return Ok(new { Message = "This is protected data.", UserId = userID });
     }
 
     [HttpPost]
