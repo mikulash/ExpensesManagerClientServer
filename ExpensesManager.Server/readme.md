@@ -17,3 +17,11 @@ May interact with multiple repositories and other services to fulfill business r
 Manages data access and persistence.
 Encapsulates the logic required to query, save, and update data.
 Abstracts the data access details, making it easier to swap out data storage implementations if needed.
+
+## how to
+
+update db
+
+1. cd ExpensesManager.Server
+2. dotnet ef migration add XXX
+3. dotnet ef database update
