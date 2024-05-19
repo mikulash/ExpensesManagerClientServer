@@ -1,6 +1,6 @@
 ﻿namespace ExpensesManager.Server.Models;
 
-public class FacadeResponse<T>
+public class FacadeResponse<T> where T : notnull
 {
     public int StatusCode { get; set; }
     public string? Message { get; set; }

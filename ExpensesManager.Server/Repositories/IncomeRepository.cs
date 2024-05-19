@@ -1,6 +1,55 @@
-﻿namespace ExpensesManager.Server.Repositories;
+﻿using ExpensesManager.Server.Data;
 
-public class IncomeRepository
+namespace ExpensesManager.Server.Repositories;
+
+public class IncomeRepository(ApplicationDbContext context)
 {
-    
+    public List<Income> GetAllIncomesByUser(int userId)
+    {
+        return context.Incomes.Where(i => i.UserId == userId).ToList();
+    }
+
+    public Income? GetIncomeById(int incomeId)
+    {
+        return context.Incomes.FirstOrDefault(i => i.Id == incomeId);
+    }
+
+    public bool SetIncome( Income income)
+    {
+        // add or update income
+        var isIncomePresent = context.Incomes.Any(i => i.Id == income.Id);
+        if (isIncomePresent)
+        {
+            context.Incomes.Update(income);
+        }
+        else
+        {
+            context.Incomes.Add(income);
+        }
+
+        var changesSaved = context.SaveChanges() > 0;
+        return changesSaved;
+    }
+
+    public bool DeleteIncome(int incomeId)
+    {
+        var income = context.Incomes.FirstOrDefault(i => i.Id == incomeId);
+        if (income == null)
+        {
+            return false;
+        }
+
+        context.Incomes.Remove(income);
+        var changesSaved = context.SaveChanges() > 0;
+        return changesSaved;
+    }
+
+    public bool DeleteAllIncomes(int userId)
+    {
+        var incomes = context.Incomes.Where(i => i.UserId == userId).ToList();
+        context.Incomes.RemoveRange(incomes);
+        var changesSaved = context.SaveChanges() > 0;
+        return changesSaved;
+    }
+
 }

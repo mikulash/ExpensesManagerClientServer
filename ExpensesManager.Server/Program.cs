@@ -65,6 +65,11 @@ builder.Services.AddScoped<ExpenseRepository>();
 builder.Services.AddScoped<ExpenseService>();
 builder.Services.AddScoped<ExpenseFacade>();
 
+// add income services
+builder.Services.AddScoped<IncomeRepository>();
+builder.Services.AddScoped<IncomeService>();
+builder.Services.AddScoped<IncomeFacade>();
+
 // add category services
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<CategoryService>();

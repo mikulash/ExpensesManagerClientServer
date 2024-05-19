@@ -1,5 +1,6 @@
-﻿
-using System.Security.Claims;
+﻿using System.Security.Claims;
+using ExpensesManager.Server.DTOs;
+using ExpensesManager.Server.Facades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,30 +9,42 @@ namespace ExpensesManager.Server.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class IncomeController : ControllerBase
+public class IncomeController(IncomeFacade incomeFacade) : ApiControllerBase
 {
     [HttpGet]
     public IActionResult Get(int id)
     {
-        var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        return Ok(new { Message = "This is protected data.", UserId = userID });
+        var retval = incomeFacade.GetIncomeById(id);
+        return FacadeResponseToActionResult(retval);
     }
 
-    [HttpPost]
-    public IActionResult Post()
+    [HttpGet("GetAll")]
+    public IActionResult GetAll()
     {
-        return Ok(new { Message = "This is protected data." });
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var retval = incomeFacade.GetAllIncomesByUser(userId);
+        return FacadeResponseToActionResult(retval);
     }
 
-    [HttpPut]
-    public IActionResult Put()
+    [HttpPost("AddOrUpdate")]
+    public IActionResult Post(IncomeDto incomeDto)
     {
-        return Ok(new { Message = "This is protected data." });
+        var retval = incomeFacade.SetIncome(incomeDto);
+        return FacadeResponseToActionResult(retval);
     }
 
     [HttpDelete]
-    public IActionResult Delete()
+    public IActionResult Delete(int incomeId)
     {
-        return Ok(new { Message = "This is protected data." });
+        var retval = incomeFacade.DeleteIncome(incomeId);
+        return FacadeResponseToActionResult(retval);
+    }
+
+    [HttpDelete("DeleteAll")]
+    public IActionResult DeleteAll()
+    {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var retval = incomeFacade.DeleteAllIncomes(userId);
+        return FacadeResponseToActionResult(retval);
     }
 }
