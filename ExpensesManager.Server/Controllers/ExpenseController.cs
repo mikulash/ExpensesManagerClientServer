@@ -10,9 +10,27 @@ namespace ExpensesManager.Server.Controllers;
 public class ExpenseController : ControllerBase
 {
     [HttpGet]
-    public IActionResult GetData()
+    public IActionResult Get()
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get the authenticated user's ID
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         return Ok(new { Message = "This is protected data.", UserId = userId });
+    }
+
+    [HttpPost]
+    public IActionResult Post()
+    {
+        return Ok(new { Message = "This is protected data." });
+    }
+
+    [HttpPut]
+    public IActionResult Put()
+    {
+        return Ok(new { Message = "This is protected data." });
+    }
+
+    [HttpDelete]
+    public IActionResult Delete()
+    {
+        return Ok(new { Message = "This is protected data." });
     }
 }

@@ -10,9 +10,9 @@ public class ApplicationDbContext : IdentityDbContext
         : base(options)
     {
     }
+
     public DbSet<User> UserDetails { get; set; }
     public DbSet<Income> Incomes { get; set; }
     public DbSet<Expense> Expenses { get; set; }
     public DbSet<Category> Categories { get; set; }
-
 }
