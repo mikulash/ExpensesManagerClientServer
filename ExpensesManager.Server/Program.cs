@@ -75,6 +75,11 @@ builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<CategoryFacade>();
 
+// add user services
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<UserFacade>();
+
+
 
 builder.Services.AddAuthentication(options =>
     {
