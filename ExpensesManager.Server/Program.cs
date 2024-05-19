@@ -1,5 +1,7 @@
 using System.Text;
 using ExpensesManager.Server.Data;
+using ExpensesManager.Server.Facades;
+using ExpensesManager.Server.Repositories;
 using ExpensesManager.Server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -57,6 +59,14 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]);
 builder.Services.AddSingleton<JwtTokenGenerator>();
+
+// add services
+
+// add category services
+builder.Services.AddScoped<CategoryRepository>();
+builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<CategoryFacade>();
+
 
 builder.Services.AddAuthentication(options =>
     {
