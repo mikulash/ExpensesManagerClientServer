@@ -10,17 +10,16 @@ public class CategoryMapping
         {
             Id = category.Id,
             Name = category.Name,
-            UserId = category.UserId
         };
     }
 
-    public static Category ToCategory(CategoryDto categoryDto)
+    public static Category ToCategory(CategoryDto categoryDto, string userId)
     {
         return new Category
         {
             Id = categoryDto.Id,
             Name = categoryDto.Name,
-            UserId = categoryDto.UserId
+            UserId = userId
         };
     }
 }

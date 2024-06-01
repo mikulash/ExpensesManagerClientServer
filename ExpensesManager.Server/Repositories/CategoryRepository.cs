@@ -20,9 +20,9 @@ public class CategoryRepository(ApplicationDbContext context)
         return categories;
     }
 
-    public Category? GetCategoryById(int categoryId)
+    public Category? GetCategoryById(int categoryId, string userId)
     {
-        return context.Categories.FirstOrDefault(c => c.Id == categoryId);
+        return context.Categories.FirstOrDefault(c => c.Id == categoryId && c.UserId == userId);
     }
 
     public bool SetCategory(Category category)

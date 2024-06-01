@@ -8,22 +8,26 @@ namespace ExpensesManager.Server.Facades;
 
 public class ExpenseFacade(ExpenseService expenseService)
 {
-    public FacadeResponse<List<Expense>> GetAllExpensesByUser(string userId)
+    public FacadeResponse<List<ExpenseDto>> GetAllExpensesByUser(string userId)
     {
-        var retval = new FacadeResponse<List<Expense>>();
+        var retval = new FacadeResponse<List<ExpenseDto>>();
         var expenses = expenseService.GetAllExpensesByUser(userId);
         if (expenses.Count == 0) return retval.SetNotFound("No expenses found.");
 
-        return retval.SetOk(expenses);
+        var expensesDto = expenses.Select(ExpenseMapping.ToExpenseDto).ToList();
+
+        return retval.SetOk(expensesDto);
     }
 
-    public FacadeResponse<Expense> GetExpenseById(int expenseId)
+    public FacadeResponse<ExpenseDto> GetExpenseById(int expenseId)
     {
-        var retval = new FacadeResponse<Expense>();
+        var retval = new FacadeResponse<ExpenseDto>();
         var expense = expenseService.GetExpenseById(expenseId);
         if (expense == null) return retval.SetNotFound("Expense not found.");
 
-        return retval.SetOk(expense);
+        var expenseDto = ExpenseMapping.ToExpenseDto(expense);
+
+        return retval.SetOk(expenseDto);
     }
 
     public FacadeResponse<bool> SetExpense(string userId, ExpenseDto expenseDto)
@@ -57,30 +61,37 @@ public class ExpenseFacade(ExpenseService expenseService)
         return retval.SetOk(result);
     }
 
-    public FacadeResponse<List<Expense>> GetExpensesByCategory(string userId, int categoryId)
+    public FacadeResponse<List<ExpenseDto>> GetExpensesByCategory(string userId, int categoryId)
     {
-        var retval = new FacadeResponse<List<Expense>>();
+        var retval = new FacadeResponse<List<ExpenseDto>>();
         var expenses = expenseService.GetExpensesByCategory(userId, categoryId);
         if (expenses.Count == 0) return retval.SetNotFound("No expenses found for the specified category.");
 
-        return retval.SetOk(expenses);
+        var expensesDto = expenses.Select(ExpenseMapping.ToExpenseDto).ToList();
+
+        return retval.SetOk(expensesDto);
     }
 
-    public FacadeResponse<List<Expense>> GetExpensesByDateRange(string userId, DateTime startDate, DateTime endDate)
+    public FacadeResponse<List<ExpenseDto>> GetExpensesByDateRange(string userId, DateTime startDate, DateTime endDate)
     {
-        var retval = new FacadeResponse<List<Expense>>();
+        var retval = new FacadeResponse<List<ExpenseDto>>();
         var expenses = expenseService.GetExpensesByDateRange(userId, startDate, endDate);
         if (expenses.Count == 0) return retval.SetNotFound("No expenses found in the specified date range.");
 
-        return retval.SetOk(expenses);
+        var expensesDto = expenses.Select(ExpenseMapping.ToExpenseDto).ToList();
+
+        return retval.SetOk(expensesDto);
     }
 
-    public FacadeResponse<List<Expense>> GetExpensesByAmountRange(string userId, decimal minAmount, decimal maxAmount)
+    public FacadeResponse<List<ExpenseDto>> GetExpensesByAmountRange(string userId, decimal minAmount,
+        decimal maxAmount)
     {
-        var retval = new FacadeResponse<List<Expense>>();
+        var retval = new FacadeResponse<List<ExpenseDto>>();
         var expenses = expenseService.GetExpensesByAmountRange(userId, minAmount, maxAmount);
         if (expenses.Count == 0) return retval.SetNotFound("No expenses found in the specified amount range.");
 
-        return retval.SetOk(expenses);
+        var expensesDto = expenses.Select(ExpenseMapping.ToExpenseDto).ToList();
+
+        return retval.SetOk(expensesDto);
     }
 }

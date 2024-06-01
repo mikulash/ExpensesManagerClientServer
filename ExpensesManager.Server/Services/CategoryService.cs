@@ -14,9 +14,9 @@ public class CategoryService(CategoryRepository categoryRepository)
         return categoryRepository.GetAllCategoriesByUser(userId);
     }
 
-    public Category? GetCategoryById(int categoryId)
+    public Category? GetCategoryById(int categoryId, string userId)
     {
-        return categoryRepository.GetCategoryById(categoryId);
+        return categoryRepository.GetCategoryById(categoryId, userId);
     }
 
     public bool SetCategory(Category category)

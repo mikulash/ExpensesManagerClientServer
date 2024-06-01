@@ -2,53 +2,48 @@
 using ExpensesManager.Server.Mappings;
 using ExpensesManager.Server.Models;
 using ExpensesManager.Server.Services;
-using Microsoft.IdentityModel.Tokens;
 
 namespace ExpensesManager.Server.Facades;
 
 public class CategoryFacade(CategoryService categoryService)
 {
-    public FacadeResponse<List<Category>> GetAllDefaultCategories()
+    public FacadeResponse<List<CategoryDto>> GetAllCategoriesByUser(string userId)
     {
-        var retval = new FacadeResponse<List<Category>>();
-        var categories = categoryService.GetAllDefaultCategories();
-        if (categories.Count == 0) return retval.SetNotFound("No default categories found.");
-
-        return retval.SetOk(categories);
-
-    }
-
-    public FacadeResponse<List<Category>> GetAllCategoriesByUser(string userId)
-    {
-        var retval = new FacadeResponse<List<Category>>();
+        var retval = new FacadeResponse<List<CategoryDto>>();
         var categories = categoryService.GetAllCategoriesByUser(userId);
         if (categories.Count == 0) return retval.SetNotFound("No default categories found.");
 
-        return retval.SetOk(categories);
+        var categoriesDto = categories.Select(CategoryMapping.ToCategoryDto).ToList();
+        return retval.SetOk(categoriesDto);
     }
 
-    public FacadeResponse<Category> GetCategoryById(int categoryId)
+    public FacadeResponse<CategoryDto> GetCategoryById(int categoryId, string userId)
     {
-        var retval = new FacadeResponse<Category>();
-        var category = categoryService.GetCategoryById(categoryId);
+        var retval = new FacadeResponse<CategoryDto>();
+        var category = categoryService.GetCategoryById(categoryId, userId);
+
         if (category == null) return retval.SetNotFound("Category not found.");
-        return retval.SetOk(category);
+
+        if (category.UserId != userId) return retval.SetForbidden("You are not allowed to access this category.");
+
+        var categoryDto = CategoryMapping.ToCategoryDto(category);
+
+        return retval.SetOk(categoryDto);
     }
 
-    public FacadeResponse<bool> SetCategory(CategoryDto categoryDto)
+    public FacadeResponse<CategoryDto> SetCategory(CategoryDto categoryDto, string userId)
     {
-        var retval = new FacadeResponse<bool>();
+        var retval = new FacadeResponse<CategoryDto>();
 
-        if (categoryDto.UserId.IsNullOrEmpty()) return retval.SetBadRequest("User ID cannot be 0.");
-
-        var category = CategoryMapping.ToCategory(categoryDto);
+        var category = CategoryMapping.ToCategory(categoryDto, userId);
 
         var isSuccess = categoryService.SetCategory(category);
         if (!isSuccess) return retval.SetServerError("Error saving category.");
-        return retval.SetOk(isSuccess);
+
+        return retval.SetOk(categoryDto);
     }
 
-    public FacadeResponse<bool> DeleteCategory(int categoryId)
+    public FacadeResponse<bool> DeleteCategory(int categoryId, string userId)
     {
         var retval = new FacadeResponse<bool>();
         var isDeletingSuccess = categoryService.DeleteCategory(categoryId);

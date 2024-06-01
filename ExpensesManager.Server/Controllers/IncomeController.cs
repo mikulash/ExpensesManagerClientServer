@@ -11,14 +11,14 @@ namespace ExpensesManager.Server.Controllers;
 public class IncomeController(IncomeFacade incomeFacade) : ApiControllerBase
 {
     [HttpGet]
-    public IActionResult Get(int id)
+    public ActionResult<IncomeDto> Get(int id)
     {
         var retval = incomeFacade.GetIncomeById(id);
         return FacadeResponseToActionResult(retval);
     }
 
     [HttpGet("GetAll")]
-    public IActionResult GetAll()
+    public ActionResult<List<IncomeDto>> GetAll()
     {
         var userId = GetUserId();
         var retval = incomeFacade.GetAllIncomesByUser(userId);
@@ -26,21 +26,21 @@ public class IncomeController(IncomeFacade incomeFacade) : ApiControllerBase
     }
 
     [HttpPost("AddOrUpdate")]
-    public IActionResult Post(IncomeDto incomeDto)
+    public ActionResult<bool> Post(IncomeDto incomeDto)
     {
         var retval = incomeFacade.SetIncome(incomeDto);
         return FacadeResponseToActionResult(retval);
     }
 
     [HttpDelete]
-    public IActionResult Delete(int incomeId)
+    public ActionResult<bool> Delete(int incomeId)
     {
         var retval = incomeFacade.DeleteIncome(incomeId);
         return FacadeResponseToActionResult(retval);
     }
 
     [HttpDelete("DeleteAll")]
-    public IActionResult DeleteAll()
+    public ActionResult<bool> DeleteAll()
     {
         var userId = GetUserId();
         var retval = incomeFacade.DeleteAllIncomes(userId);

@@ -11,31 +11,35 @@ namespace ExpensesManager.Server.Controllers;
 public class CategoryController(CategoryFacade categoryFacade) : ApiControllerBase
 {
     [HttpGet]
-    public IActionResult Get(int id)
+    public ActionResult<CategoryDto> Get(int id)
     {
-        var retval = categoryFacade.GetCategoryById(id);
+        var userId = GetUserId();
+        var retval = categoryFacade.GetCategoryById(id, userId);
         return FacadeResponseToActionResult(retval);
     }
 
     [HttpPost("AddOrUpdate")]
-    public IActionResult Post(CategoryDto categoryDto)
+    public ActionResult<CategoryDto> Post(CategoryDto categoryDto)
     {
-        var retval = categoryFacade.SetCategory(categoryDto);
+        var userId = GetUserId();
+        var retval = categoryFacade.SetCategory(categoryDto, userId);
         return FacadeResponseToActionResult(retval);
     }
 
     [HttpDelete]
-    public IActionResult Delete(int categoryId)
+    public ActionResult<bool> Delete(int categoryId)
     {
-        var retval = categoryFacade.DeleteCategory(categoryId);
+        var userId = GetUserId();
+        var retval = categoryFacade.DeleteCategory(categoryId, userId);
         return FacadeResponseToActionResult(retval);
     }
 
 
     [HttpGet("GetAll")]
-    public IActionResult GetAll()
+    public ActionResult<List<CategoryDto>> GetAll()
     {
         var userId = GetUserId();
-        return Ok(categoryFacade.GetAllCategoriesByUser(userId));
+        var retval = categoryFacade.GetAllCategoriesByUser(userId);
+        return FacadeResponseToActionResult(retval);
     }
 }

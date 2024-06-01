@@ -8,23 +8,27 @@ namespace ExpensesManager.Server.Facades;
 
 public class IncomeFacade(IncomeService incomeService)
 {
-    public FacadeResponse<List<Income>> GetAllIncomesByUser(string userId)
+    public FacadeResponse<List<IncomeDto>> GetAllIncomesByUser(string userId)
     {
-        var retval = new FacadeResponse<List<Income>>();
+        var retval = new FacadeResponse<List<IncomeDto>>();
         var incomes = incomeService.GetAllIncomesByUser(userId);
         if (incomes.Count == 0) return retval.SetNotFound("No incomes found.");
 
-        return retval.SetOk(incomes);
+        var incomesDto = incomes.Select(IncomeMapping.ToIncomeDto).ToList();
+
+        return retval.SetOk(incomesDto);
 
     }
 
-    public FacadeResponse<Income> GetIncomeById(int incomeId)
+    public FacadeResponse<IncomeDto> GetIncomeById(int incomeId)
     {
-        var retval = new FacadeResponse<Income>();
+        var retval = new FacadeResponse<IncomeDto>();
         var income = incomeService.GetIncomeById(incomeId);
         if (income == null) return retval.SetNotFound("Income not found.");
 
-        return retval.SetOk(income);
+        var incomeDto = IncomeMapping.ToIncomeDto(income);
+
+        return retval.SetOk(incomeDto);
 
     }
 

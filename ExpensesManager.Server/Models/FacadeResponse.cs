@@ -50,4 +50,11 @@ public class FacadeResponse<T> where T : notnull
         Message = message;
         return this;
     }
+
+    public FacadeResponse<T> SetForbidden(string message)
+    {
+        StatusCode = 403;
+        Message = message;
+        return this;
+    }
 }

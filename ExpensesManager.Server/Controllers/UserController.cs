@@ -31,7 +31,7 @@ public class UserController(UserFacade userFacade, UserManager<IdentityUser> use
 
 
     [HttpGet("Balance")]
-    public IActionResult GetCurrentUserBalance()
+    public ActionResult<decimal> GetCurrentUserBalance()
     {
         var userId = GetUserId();
         if (userId.IsNullOrEmpty()) return Unauthorized(new { Success = false, Message = "Unauthorized" });
@@ -41,14 +41,14 @@ public class UserController(UserFacade userFacade, UserManager<IdentityUser> use
     }
 
     [HttpGet("TotalIncome")]
-    public IActionResult GetTotalIncome(string userId)
+    public ActionResult<decimal> GetTotalIncome(string userId)
     {
         var totalIncome = userFacade.GetTotalIncome(userId);
         return FacadeResponseToActionResult(totalIncome);
     }
 
     [HttpGet("TotalExpense")]
-    public IActionResult GetTotalExpense(string userId)
+    public ActionResult<decimal> GetTotalExpense(string userId)
     {
         var totalExpense = userFacade.GetTotalExpense(userId);
         return FacadeResponseToActionResult(totalExpense);

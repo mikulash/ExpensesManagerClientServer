@@ -11,14 +11,14 @@ namespace ExpensesManager.Server.Controllers;
 public class ExpenseController(ExpenseFacade expenseFacade) : ApiControllerBase
 {
     [HttpGet]
-    public IActionResult Get(int id)
+    public ActionResult<ExpenseDto> Get(int id)
     {
         var retval = expenseFacade.GetExpenseById(id);
         return FacadeResponseToActionResult(retval);
     }
 
     [HttpPost("AddOrUpdate")]
-    public IActionResult Post(ExpenseDto expenseDto)
+    public ActionResult<bool> Post(ExpenseDto expenseDto)
     {
         var userId = GetUserId();
         var retval = expenseFacade.SetExpense(userId, expenseDto);
@@ -26,14 +26,14 @@ public class ExpenseController(ExpenseFacade expenseFacade) : ApiControllerBase
     }
 
     [HttpDelete]
-    public IActionResult Delete(int expenseId)
+    public ActionResult<bool> Delete(int expenseId)
     {
         var retval = expenseFacade.DeleteExpense(expenseId);
         return FacadeResponseToActionResult(retval);
     }
 
     [HttpGet("GetAll")]
-    public IActionResult GetAll()
+    public ActionResult<List<ExpenseDto>> GetAll()
     {
         var userId = GetUserId();
         var retval = expenseFacade.GetAllExpensesByUser(userId);
@@ -41,7 +41,7 @@ public class ExpenseController(ExpenseFacade expenseFacade) : ApiControllerBase
     }
 
     [HttpGet("GetByCategory")]
-    public IActionResult GetByCategory(int categoryId)
+    public ActionResult<List<ExpenseDto>> GetByCategory(int categoryId)
     {
         var userId = GetUserId();
         var retval = expenseFacade.GetExpensesByCategory(userId, categoryId);
@@ -49,7 +49,7 @@ public class ExpenseController(ExpenseFacade expenseFacade) : ApiControllerBase
     }
 
     [HttpGet("GetByDateRange")]
-    public IActionResult GetByDateRange(DateTime startDate, DateTime endDate)
+    public ActionResult<List<ExpenseDto>> GetByDateRange(DateTime startDate, DateTime endDate)
     {
         var userId = GetUserId();
         var retval = expenseFacade.GetExpensesByDateRange(userId, startDate, endDate);
@@ -57,7 +57,7 @@ public class ExpenseController(ExpenseFacade expenseFacade) : ApiControllerBase
     }
 
     [HttpGet("GetByAmountRange")]
-    public IActionResult GetByAmountRange(decimal minAmount, decimal maxAmount)
+    public ActionResult<List<ExpenseDto>> GetByAmountRange(decimal minAmount, decimal maxAmount)
     {
         var userId = GetUserId();
         var retval = expenseFacade.GetExpensesByAmountRange(userId, minAmount, maxAmount);

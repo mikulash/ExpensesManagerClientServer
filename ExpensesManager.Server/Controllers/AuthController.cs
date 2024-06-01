@@ -8,7 +8,7 @@ namespace ExpensesManager.Server.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : ControllerBase
+public class AuthController : ApiControllerBase
 {
     private readonly JwtTokenGenerator _jwtTokenGenerator;
     private readonly SignInManager<IdentityUser> _signInManager;
@@ -36,7 +36,6 @@ public class AuthController : ControllerBase
 
         if (!result.Succeeded) return BadRequest(result.Errors);
 
-        await _signInManager.SignInAsync(user, false);
         return Ok(new RegistrationSuccessDto("User created successfully"));
     }
 
