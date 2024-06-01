@@ -9,7 +9,7 @@ public class CategoryService(CategoryRepository categoryRepository)
         return categoryRepository.GetAllDefaultCategories();
     }
 
-    public List<Category> GetAllCategoriesByUser(int userId)
+    public List<Category> GetAllCategoriesByUser(string userId)
     {
         return categoryRepository.GetAllCategoriesByUser(userId);
     }
@@ -29,7 +29,7 @@ public class CategoryService(CategoryRepository categoryRepository)
         return categoryRepository.DeleteCategory(categoryId);
     }
 
-    public bool DeleteAllCategories(int userId)
+    public bool DeleteAllCategories(string userId)
     {
         return categoryRepository.DeleteAllCategories(userId);
     }

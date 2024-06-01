@@ -1,9 +1,9 @@
-﻿using System.Security.Claims;
-using ExpensesManager.Server.DTOs;
+﻿using ExpensesManager.Server.DTOs;
 using ExpensesManager.Server.Facades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ExpensesManager.Server.Controllers;
 
@@ -15,8 +15,8 @@ public class UserController(UserFacade userFacade, UserManager<IdentityUser> use
     [HttpPost]
     public async Task<ActionResult<UserDto>> GetUser()
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId == null) return Unauthorized(new { Success = false, Message = "Unauthorized" });
+        var userId = GetUserId();
+        if (userId.IsNullOrEmpty()) return Unauthorized(new { Success = false, Message = "Unauthorized" });
 
         var user = await userManager.FindByIdAsync(userId);
         if (user == null) return NotFound(new { Success = false, Message = "User not found" });
@@ -29,29 +29,26 @@ public class UserController(UserFacade userFacade, UserManager<IdentityUser> use
         return Ok(userResponse);
     }
 
-    // [HttpGet("User")]
-    // public IActionResult GetUser()
-    // {
-    //     var user = userFacade.GetUser(userId);
-    //     return FacadeResponseToActionResult(user);
-    // }
 
     [HttpGet("Balance")]
-    public IActionResult GetCurrentUserBalance(int userId)
+    public IActionResult GetCurrentUserBalance()
     {
+        var userId = GetUserId();
+        if (userId.IsNullOrEmpty()) return Unauthorized(new { Success = false, Message = "Unauthorized" });
+
         var retval = userFacade.GetCurrentBalance(userId);
         return FacadeResponseToActionResult(retval);
     }
 
     [HttpGet("TotalIncome")]
-    public IActionResult GetTotalIncome(int userId)
+    public IActionResult GetTotalIncome(string userId)
     {
         var totalIncome = userFacade.GetTotalIncome(userId);
         return FacadeResponseToActionResult(totalIncome);
     }
 
     [HttpGet("TotalExpense")]
-    public IActionResult GetTotalExpense(int userId)
+    public IActionResult GetTotalExpense(string userId)
     {
         var totalExpense = userFacade.GetTotalExpense(userId);
         return FacadeResponseToActionResult(totalExpense);

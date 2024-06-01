@@ -2,7 +2,7 @@
 
 namespace ExpensesManager.Server.IntegrationTests;
 
-public class MockDataFactory
+public static class MockDataFactory
 {
     public static RegistrationDto CreateRegistrationDto(string email, string password)
     {

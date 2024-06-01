@@ -4,7 +4,7 @@ namespace ExpensesManager.Server.Services;
 
 public class IncomeService(IncomeRepository incomeRepository)
 {
-    public List<Income> GetAllIncomesByUser(int userId)
+    public List<Income> GetAllIncomesByUser(string userId)
     {
         return incomeRepository.GetAllIncomesByUser(userId);
     }
@@ -24,7 +24,7 @@ public class IncomeService(IncomeRepository incomeRepository)
         return incomeRepository.DeleteIncome(incomeId);
     }
 
-    public bool DeleteAllIncomes(int userId)
+    public bool DeleteAllIncomes(string userId)
     {
         return incomeRepository.DeleteAllIncomes(userId);
     }

@@ -33,9 +33,9 @@ public class CategoryController(CategoryFacade categoryFacade) : ApiControllerBa
 
 
     [HttpGet("GetAll")]
-    public IActionResult GetAll(int? userId)
+    public IActionResult GetAll()
     {
-        if (userId == null) return Ok(categoryFacade.GetAllDefaultCategories());
-        return Ok(categoryFacade.GetAllCategoriesByUser(userId.Value));
+        var userId = GetUserId();
+        return Ok(categoryFacade.GetAllCategoriesByUser(userId));
     }
 }

@@ -6,15 +6,15 @@ public class CategoryRepository(ApplicationDbContext context)
 {
     public List<Category> GetAllDefaultCategories()
     {
-        return context.Categories.Where(c => c.UserId == 0).ToList();
+        return context.Categories.Where(c => c.UserId == "").ToList();
     }
 
-    public List<Category> GetAllCategoriesByUser(int userId, bool includeDefaultCategories = true)
+    public List<Category> GetAllCategoriesByUser(string userId, bool includeDefaultCategories = true)
     {
         var categories = context.Categories.Where(c => c.UserId == userId).ToList();
         if (!includeDefaultCategories) return categories;
 
-        var defaultCategories = context.Categories.Where(c => c.UserId == 0).ToList();
+        var defaultCategories = GetAllDefaultCategories();
         categories.AddRange(defaultCategories);
 
         return categories;
@@ -48,7 +48,7 @@ public class CategoryRepository(ApplicationDbContext context)
         return changesSaved;
     }
 
-    public bool DeleteAllCategories(int userId)
+    public bool DeleteAllCategories(string userId)
     {
         var categories = context.Categories.Where(c => c.UserId == userId).ToList();
         if (categories.Count == 0) return false;

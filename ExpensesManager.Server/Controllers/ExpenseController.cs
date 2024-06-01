@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using ExpensesManager.Server.DTOs;
+﻿using ExpensesManager.Server.DTOs;
 using ExpensesManager.Server.Facades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +20,7 @@ public class ExpenseController(ExpenseFacade expenseFacade) : ApiControllerBase
     [HttpPost("AddOrUpdate")]
     public IActionResult Post(ExpenseDto expenseDto)
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var userId = GetUserId();
         var retval = expenseFacade.SetExpense(userId, expenseDto);
         return FacadeResponseToActionResult(retval);
     }
@@ -36,7 +35,7 @@ public class ExpenseController(ExpenseFacade expenseFacade) : ApiControllerBase
     [HttpGet("GetAll")]
     public IActionResult GetAll()
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var userId = GetUserId();
         var retval = expenseFacade.GetAllExpensesByUser(userId);
         return FacadeResponseToActionResult(retval);
     }
@@ -44,7 +43,7 @@ public class ExpenseController(ExpenseFacade expenseFacade) : ApiControllerBase
     [HttpGet("GetByCategory")]
     public IActionResult GetByCategory(int categoryId)
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var userId = GetUserId();
         var retval = expenseFacade.GetExpensesByCategory(userId, categoryId);
         return FacadeResponseToActionResult(retval);
     }
@@ -52,7 +51,7 @@ public class ExpenseController(ExpenseFacade expenseFacade) : ApiControllerBase
     [HttpGet("GetByDateRange")]
     public IActionResult GetByDateRange(DateTime startDate, DateTime endDate)
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var userId = GetUserId();
         var retval = expenseFacade.GetExpensesByDateRange(userId, startDate, endDate);
         return FacadeResponseToActionResult(retval);
     }
@@ -60,7 +59,7 @@ public class ExpenseController(ExpenseFacade expenseFacade) : ApiControllerBase
     [HttpGet("GetByAmountRange")]
     public IActionResult GetByAmountRange(decimal minAmount, decimal maxAmount)
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var userId = GetUserId();
         var retval = expenseFacade.GetExpensesByAmountRange(userId, minAmount, maxAmount);
         return FacadeResponseToActionResult(retval);
     }

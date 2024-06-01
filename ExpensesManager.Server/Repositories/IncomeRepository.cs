@@ -4,7 +4,7 @@ namespace ExpensesManager.Server.Repositories;
 
 public class IncomeRepository(ApplicationDbContext context)
 {
-    public List<Income> GetAllIncomesByUser(int userId)
+    public List<Income> GetAllIncomesByUser(string userId)
     {
         return context.Incomes.Where(i => i.UserId == userId).ToList();
     }
@@ -37,7 +37,7 @@ public class IncomeRepository(ApplicationDbContext context)
         return changesSaved;
     }
 
-    public bool DeleteAllIncomes(int userId)
+    public bool DeleteAllIncomes(string userId)
     {
         var incomes = context.Incomes.Where(i => i.UserId == userId).ToList();
         context.Incomes.RemoveRange(incomes);

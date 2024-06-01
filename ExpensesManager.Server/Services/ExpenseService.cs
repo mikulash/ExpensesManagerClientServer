@@ -5,7 +5,7 @@ namespace ExpensesManager.Server.Services;
 
 public class ExpenseService(ExpenseRepository expenseRepository)
 {
-    public List<Expense> GetAllExpensesByUser(int userId)
+    public List<Expense> GetAllExpensesByUser(string userId)
     {
         return expenseRepository.GetAllExpensesByUser(userId);
     }
@@ -15,7 +15,7 @@ public class ExpenseService(ExpenseRepository expenseRepository)
         return expenseRepository.GetExpenseById(expenseId);
     }
 
-    public bool SetExpense(int userId, Expense expense)
+    public bool SetExpense(string userId, Expense expense)
     {
         return expenseRepository.SetExpense(userId, expense);
     }
@@ -25,22 +25,22 @@ public class ExpenseService(ExpenseRepository expenseRepository)
         return expenseRepository.DeleteExpense(expenseId);
     }
 
-    public bool DeleteAllExpenses(int userId)
+    public bool DeleteAllExpenses(string userId)
     {
         return expenseRepository.DeleteAllExpenses(userId);
     }
 
-    public List<Expense> GetExpensesByCategory(int userId, int categoryId)
+    public List<Expense> GetExpensesByCategory(string userId, int categoryId)
     {
         return expenseRepository.GetExpensesByCategory(userId, categoryId);
     }
 
-    public List<Expense> GetExpensesByDateRange(int userId, DateTime startDate, DateTime endDate)
+    public List<Expense> GetExpensesByDateRange(string userId, DateTime startDate, DateTime endDate)
     {
         return expenseRepository.GetExpensesByDateRange(userId, startDate, endDate);
     }
 
-    public List<Expense> GetExpensesByAmountRange(int userId, decimal minAmount, decimal maxAmount)
+    public List<Expense> GetExpensesByAmountRange(string userId, decimal minAmount, decimal maxAmount)
     {
         return expenseRepository.GetExpensesByAmountRange(userId, minAmount, maxAmount);
     }

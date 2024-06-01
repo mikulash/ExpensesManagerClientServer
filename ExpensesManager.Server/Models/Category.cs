@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 public class Category
 {
@@ -6,5 +7,7 @@ public class Category
 
     [Required] [MaxLength(100)] public string Name { get; set; }
 
-    public int UserId { get; set; }
+    [Required] public string UserId { get; set; }
+
+    public IdentityUser User { get; set; }
 }

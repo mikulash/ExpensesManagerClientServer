@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using ExpensesManager.Server.Models;
+using Microsoft.AspNetCore.Identity;
 
 public class Income
 {
@@ -14,7 +14,7 @@ public class Income
 
     public DateTime Date { get; set; }
 
-    [Required] public int UserId { get; set; }
+    [Required] public string UserId { get; set; }
 
-    public User User { get; set; }
+    public IdentityUser User { get; set; }
 }

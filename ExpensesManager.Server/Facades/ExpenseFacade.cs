@@ -2,12 +2,13 @@
 using ExpensesManager.Server.Mappings;
 using ExpensesManager.Server.Models;
 using ExpensesManager.Server.Services;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ExpensesManager.Server.Facades;
 
 public class ExpenseFacade(ExpenseService expenseService)
 {
-    public FacadeResponse<List<Expense>> GetAllExpensesByUser(int userId)
+    public FacadeResponse<List<Expense>> GetAllExpensesByUser(string userId)
     {
         var retval = new FacadeResponse<List<Expense>>();
         var expenses = expenseService.GetAllExpensesByUser(userId);
@@ -25,11 +26,11 @@ public class ExpenseFacade(ExpenseService expenseService)
         return retval.SetOk(expense);
     }
 
-    public FacadeResponse<bool> SetExpense(int userId, ExpenseDto expenseDto)
+    public FacadeResponse<bool> SetExpense(string userId, ExpenseDto expenseDto)
     {
         var retval = new FacadeResponse<bool>();
 
-        if (expenseDto.UserId == 0) return retval.SetBadRequest("User ID cannot be 0.");
+        if (expenseDto.UserId.IsNullOrEmpty()) return retval.SetBadRequest("User ID cannot be 0.");
 
         var expense = ExpenseMapping.ToExpense(expenseDto);
         var result = expenseService.SetExpense(userId, expense);
@@ -47,7 +48,7 @@ public class ExpenseFacade(ExpenseService expenseService)
         return retval.SetOk(result);
     }
 
-    public FacadeResponse<bool> DeleteAllExpenses(int userId)
+    public FacadeResponse<bool> DeleteAllExpenses(string userId)
     {
         var retval = new FacadeResponse<bool>();
         var result = expenseService.DeleteAllExpenses(userId);
@@ -56,7 +57,7 @@ public class ExpenseFacade(ExpenseService expenseService)
         return retval.SetOk(result);
     }
 
-    public FacadeResponse<List<Expense>> GetExpensesByCategory(int userId, int categoryId)
+    public FacadeResponse<List<Expense>> GetExpensesByCategory(string userId, int categoryId)
     {
         var retval = new FacadeResponse<List<Expense>>();
         var expenses = expenseService.GetExpensesByCategory(userId, categoryId);
@@ -65,7 +66,7 @@ public class ExpenseFacade(ExpenseService expenseService)
         return retval.SetOk(expenses);
     }
 
-    public FacadeResponse<List<Expense>> GetExpensesByDateRange(int userId, DateTime startDate, DateTime endDate)
+    public FacadeResponse<List<Expense>> GetExpensesByDateRange(string userId, DateTime startDate, DateTime endDate)
     {
         var retval = new FacadeResponse<List<Expense>>();
         var expenses = expenseService.GetExpensesByDateRange(userId, startDate, endDate);
@@ -74,7 +75,7 @@ public class ExpenseFacade(ExpenseService expenseService)
         return retval.SetOk(expenses);
     }
 
-    public FacadeResponse<List<Expense>> GetExpensesByAmountRange(int userId, decimal minAmount, decimal maxAmount)
+    public FacadeResponse<List<Expense>> GetExpensesByAmountRange(string userId, decimal minAmount, decimal maxAmount)
     {
         var retval = new FacadeResponse<List<Expense>>();
         var expenses = expenseService.GetExpensesByAmountRange(userId, minAmount, maxAmount);

@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using ExpensesManager.Server.DTOs;
+﻿using ExpensesManager.Server.DTOs;
 using ExpensesManager.Server.Facades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +20,7 @@ public class IncomeController(IncomeFacade incomeFacade) : ApiControllerBase
     [HttpGet("GetAll")]
     public IActionResult GetAll()
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var userId = GetUserId();
         var retval = incomeFacade.GetAllIncomesByUser(userId);
         return FacadeResponseToActionResult(retval);
     }
@@ -43,7 +42,7 @@ public class IncomeController(IncomeFacade incomeFacade) : ApiControllerBase
     [HttpDelete("DeleteAll")]
     public IActionResult DeleteAll()
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var userId = GetUserId();
         var retval = incomeFacade.DeleteAllIncomes(userId);
         return FacadeResponseToActionResult(retval);
     }

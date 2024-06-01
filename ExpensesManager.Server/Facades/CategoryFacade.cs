@@ -2,6 +2,7 @@
 using ExpensesManager.Server.Mappings;
 using ExpensesManager.Server.Models;
 using ExpensesManager.Server.Services;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ExpensesManager.Server.Facades;
 
@@ -17,7 +18,7 @@ public class CategoryFacade(CategoryService categoryService)
 
     }
 
-    public FacadeResponse<List<Category>> GetAllCategoriesByUser(int userId)
+    public FacadeResponse<List<Category>> GetAllCategoriesByUser(string userId)
     {
         var retval = new FacadeResponse<List<Category>>();
         var categories = categoryService.GetAllCategoriesByUser(userId);
@@ -38,7 +39,7 @@ public class CategoryFacade(CategoryService categoryService)
     {
         var retval = new FacadeResponse<bool>();
 
-        if (categoryDto.UserId == 0) return retval.SetBadRequest("User ID cannot be 0.");
+        if (categoryDto.UserId.IsNullOrEmpty()) return retval.SetBadRequest("User ID cannot be 0.");
 
         var category = CategoryMapping.ToCategory(categoryDto);
 
@@ -55,7 +56,7 @@ public class CategoryFacade(CategoryService categoryService)
         return retval.SetOk(isDeletingSuccess);
     }
 
-    public FacadeResponse<bool> DeleteAllCategories(int userId)
+    public FacadeResponse<bool> DeleteAllCategories(string userId)
     {
         var retval = new FacadeResponse<bool>();
         var isDeletingSuccess = categoryService.DeleteAllCategories(userId);

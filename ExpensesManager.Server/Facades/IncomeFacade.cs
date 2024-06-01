@@ -2,12 +2,13 @@
 using ExpensesManager.Server.Mappings;
 using ExpensesManager.Server.Models;
 using ExpensesManager.Server.Services;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ExpensesManager.Server.Facades;
 
 public class IncomeFacade(IncomeService incomeService)
 {
-    public FacadeResponse<List<Income>> GetAllIncomesByUser(int userId)
+    public FacadeResponse<List<Income>> GetAllIncomesByUser(string userId)
     {
         var retval = new FacadeResponse<List<Income>>();
         var incomes = incomeService.GetAllIncomesByUser(userId);
@@ -30,7 +31,7 @@ public class IncomeFacade(IncomeService incomeService)
     public FacadeResponse<bool> SetIncome(IncomeDto incomeDto)
     {
         var retval = new FacadeResponse<bool>();
-        if (incomeDto.UserId == 0) return retval.SetBadRequest("User ID cannot be 0.");
+        if (incomeDto.UserId.IsNullOrEmpty()) return retval.SetBadRequest("User ID cannot be 0.");
 
         var income = IncomeMapping.ToIncome(incomeDto);
 
@@ -49,7 +50,7 @@ public class IncomeFacade(IncomeService incomeService)
         return retval.SetOk(result);
     }
 
-    public FacadeResponse<bool> DeleteAllIncomes(int userId)
+    public FacadeResponse<bool> DeleteAllIncomes(string userId)
     {
         var retval = new FacadeResponse<bool>();
         var result = incomeService.DeleteAllIncomes(userId);

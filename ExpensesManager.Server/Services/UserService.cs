@@ -1,10 +1,10 @@
-﻿using ExpensesManager.Server.Models;
+﻿using ExpensesManager.Server.DTOs;
 
 namespace ExpensesManager.Server.Services;
 
 public class UserService(IncomeService incomeService, ExpenseService expenseService)
 {
-    public decimal GetCurrentBalance(int userId)
+    public decimal GetCurrentBalance(string userId)
     {
         var incomes = incomeService.GetAllIncomesByUser(userId);
         var expenses = expenseService.GetAllExpensesByUser(userId);
@@ -15,21 +15,21 @@ public class UserService(IncomeService incomeService, ExpenseService expenseServ
         return totalIncome - totalExpense;
     }
 
-    public decimal GetTotalIncome(int userId)
+    public decimal GetTotalIncome(string userId)
     {
         var incomes = incomeService.GetAllIncomesByUser(userId);
         return incomes.Sum(i => i.Amount);
     }
 
-    public decimal GetTotalExpense(int userId)
+    public decimal GetTotalExpense(string userId)
     {
         var expenses = expenseService.GetAllExpensesByUser(userId);
         return expenses.Sum(e => e.Amount);
     }
 
-    public User GetUser(int userId)
+    public UserDto GetUser(string userId)
     {
-        return new User();
+        return new UserDto();
     }
 
     // todo statistics
