@@ -1,4 +1,5 @@
-﻿using ExpensesManager.Server.Models;
+﻿using ExpensesManager.Server.DTOs;
+using ExpensesManager.Server.DTOs.Auth;
 using ExpensesManager.Server.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterViewModel model)
+    public async Task<IActionResult> Register(RegistrationDto model)
     {
         if (ModelState.IsValid)
         {
@@ -43,39 +44,24 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginViewModel model)
+    public async Task<IActionResult> Login(LoginDto model)
     {
-        if (ModelState.IsValid)
-        {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null) return BadRequest(new { Success = false, Message = "Invalid login attempt" });
+        if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
-            if (result.Succeeded)
-            {
-                var token = _jwtTokenGenerator.GenerateToken(user);
-                return Ok(new { Success = true, Token = token, Message = "Login successful" });
-            }
+        var user = await _userManager.FindByEmailAsync(model.Email);
+        if (user == null) return BadRequest(new ErrorResponseDto("Invalid login attempt"));
 
-            return BadRequest(new { Success = false, Message = "Invalid login attempt" });
-        }
+        var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+        if (!result.Succeeded) return BadRequest(new ErrorResponseDto("Invalid login attempt"));
 
-        return BadRequest(ModelState);
+        var token = _jwtTokenGenerator.GenerateToken(user);
+        return Ok(new LoginSuccessDto { Token = token, Message = "Login successful" });
     }
-
-    [HttpGet("currentuser")]
-    public IActionResult GetCurrentUser()
-    {
-        if (User.Identity is { IsAuthenticated: true })
-            return Ok(new { Success = true, UserName = User.Identity.Name });
-
-        return Unauthorized(new { Success = false, Message = "User is not authenticated" });
-    }
-
-    [HttpPost("logout")]
-    public async Task<IActionResult> Logout()
-    {
-        await _signInManager.SignOutAsync();
-        return Ok(new { Success = true, Message = "Logged out successfully" });
-    }
+    // TODO delete or invalidate token
+    // [HttpPost("logout")]
+    // public async Task<IActionResult> Logout()
+    // {
+    //     await _signInManager.SignOutAsync();
+    //     return Ok(new { Success = true, Message = "Logged out successfully" });
+    // }
 }

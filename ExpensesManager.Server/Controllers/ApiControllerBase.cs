@@ -5,7 +5,7 @@ namespace ExpensesManager.Server.Controllers;
 
 public class ApiControllerBase : ControllerBase
 {
-    public IActionResult FacadeResponseToActionResult<T>(FacadeResponse<T> response)
+    protected IActionResult FacadeResponseToActionResult<T>(FacadeResponse<T> response) where T : notnull
     {
         return response.IsSuccess ? Ok(response.Value) : StatusCode(response.StatusCode, response.Message);
     }
