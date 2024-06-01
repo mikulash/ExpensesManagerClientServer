@@ -31,5 +31,14 @@ public class UserFacade(UserService userService)
         return retval.SetOk(totalExpense);
     }
 
+
+    public FacadeResponse<User> GetUser(int userId)
+    {
+        var retval = new FacadeResponse<User>();
+
+        if (userId == 0) return retval.SetBadRequest("User ID cannot be 0.");
+        var user = userService.GetUser(userId);
+        return retval.SetOk(user);
+    }
     // todo statistics
 }

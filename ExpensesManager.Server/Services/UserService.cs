@@ -1,4 +1,6 @@
-﻿namespace ExpensesManager.Server.Services;
+﻿using ExpensesManager.Server.Models;
+
+namespace ExpensesManager.Server.Services;
 
 public class UserService(IncomeService incomeService, ExpenseService expenseService)
 {
@@ -23,6 +25,11 @@ public class UserService(IncomeService incomeService, ExpenseService expenseServ
     {
         var expenses = expenseService.GetAllExpensesByUser(userId);
         return expenses.Sum(e => e.Amount);
+    }
+
+    public User GetUser(int userId)
+    {
+        return new User();
     }
 
     // todo statistics

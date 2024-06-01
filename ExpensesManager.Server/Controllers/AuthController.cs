@@ -23,35 +23,31 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RegistrationDto model)
-    {
-        if (ModelState.IsValid)
-        {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null) return BadRequest(new { Success = false, Message = "Invalid login attempt" });
-
-            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
-            if (result.Succeeded)
-            {
-                var token = _jwtTokenGenerator.GenerateToken(user);
-                return Ok(new { Success = true, Token = token, Message = "Login successful" });
-            }
-
-            return BadRequest(new { Success = false, Message = "Invalid login attempt" });
-        }
-
-        return BadRequest(ModelState);
-    }
-
-    [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginDto model)
+    public async Task<IActionResult> Register(RegistrationDto request)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        var user = await _userManager.FindByEmailAsync(model.Email);
+        if (request.Password != request.ConfirmPassword)
+            return BadRequest(new { Success = false, Message = "Passwords do not match" });
+
+        var user = new IdentityUser { UserName = request.Email, Email = request.Email };
+        var result = await _userManager.CreateAsync(user, request.Password);
+
+        if (!result.Succeeded) return BadRequest(result.Errors);
+
+        await _signInManager.SignInAsync(user, false);
+        return Ok(new { Success = true, Message = "Registration successful" });
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginDto request)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        var user = await _userManager.FindByEmailAsync(request.Email);
         if (user == null) return BadRequest(new ErrorResponseDto("Invalid login attempt"));
 
-        var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
         if (!result.Succeeded) return BadRequest(new ErrorResponseDto("Invalid login attempt"));
 
         var token = _jwtTokenGenerator.GenerateToken(user);
