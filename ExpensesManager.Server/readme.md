@@ -24,5 +24,5 @@ Uses controller -> facade -> service -> repository pattern.
 update db
 
 1. cd ExpensesManager.Server
-2. dotnet ef migration add XXX
+2. dotnet ef migrations add XXX
 3. dotnet ef database update

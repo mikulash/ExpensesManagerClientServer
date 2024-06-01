@@ -9,9 +9,9 @@ public static class DbInitializer
         if (context.Categories.Any()) return;
         // Seed Categories
         context.Categories.AddRange(
-            new Category { Name = "Food", Id = 1 },
-            new Category { Name = "Utilities", Id = 2 },
-            new Category { Name = "Salary", Id = 3 }
+            new Category { Name = "Food", UserId = null },
+            new Category { Name = "Utilities", UserId = null },
+            new Category { Name = "Salary", UserId = null }
         );
 
         context.SaveChanges();
