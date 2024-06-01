@@ -17,21 +17,11 @@ public class UserTests : BaseTest
     {
         const string email = "test@test.cz";
         const string password = "Test_1234";
-        var registration = new RegistrationDto
-        {
-            Email = email,
-            Password = password,
-            ConfirmPassword = password
-        };
+        var registration = MockDataFactory.CreateRegistrationDto(email, password);
+        var login = MockDataFactory.CreateLoginDto(email, password);
 
         var response = await Client.PostAsJsonAsync("/api/Auth/register", registration);
         Assert.True(response.IsSuccessStatusCode);
-
-        var login = new LoginDto
-        {
-            Email = email,
-            Password = password
-        };
 
         response = await Client.PostAsJsonAsync("/api/Auth/login", login);
         Assert.True(response.IsSuccessStatusCode);
