@@ -7,5 +7,6 @@
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::F24F9F77-279C-4017-AD08-849EA7A35ACB::net8.0::ExpensesManager.Server.IntegrationTests.BasicTest&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::F24F9F77-279C-4017-AD08-849EA7A35ACB::net8.0::ExpensesManager.Server.IntegrationTests.UserTests.UserFirstAccess&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::F24F9F77-279C-4017-AD08-849EA7A35ACB::net8.0::ExpensesManager.Server.IntegrationTests.UserTests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

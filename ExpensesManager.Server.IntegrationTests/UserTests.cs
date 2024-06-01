@@ -1,29 +1,21 @@
 ﻿using System.Net.Http.Headers;
 using ExpensesManager.Server.DTOs;
 using ExpensesManager.Server.DTOs.Auth;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit.Abstractions;
 
 namespace ExpensesManager.Server.IntegrationTests;
 
-public class UserTests : IClassFixture<WebApplicationFactory<Program>>
+public class UserTests : BaseTest
 {
-    protected readonly ITestOutputHelper TestOutputHelper;
-    private readonly WebApplicationFactory<Program> _factory;
-    protected readonly HttpClient Client;
-
-    public UserTests(WebApplicationFactory<Program> factory, ITestOutputHelper testOutputHelper)
+    public UserTests(CustomWebApplicationFactory<Program> factory, ITestOutputHelper testOutputHelper) : base(factory,
+        testOutputHelper)
     {
-        TestOutputHelper = testOutputHelper;
-        _factory = factory;
-        Client = factory.CreateClient();
     }
 
     [Fact]
     public void UserFirstAccess()
     {
-        var randPrefix = Guid.NewGuid().ToString().Substring(0, 3);
-        var email = randPrefix + "test@test.cz";
+        var email = "test@test.cz";
         var password = "Test_1234";
         var registration = new RegistrationDto
         {
@@ -33,8 +25,8 @@ public class UserTests : IClassFixture<WebApplicationFactory<Program>>
         };
 
         var response = Client.PostAsJsonAsync("/api/Auth/register", registration).Result;
-        var registerResult = response.Content.ReadFromJsonAsync<RegistrationSuccessDto>().Result;
         Assert.True(response.IsSuccessStatusCode);
+        var registerResult = response.Content.ReadFromJsonAsync<RegistrationSuccessDto>().Result;
 
         var login = new LoginDto
         {
