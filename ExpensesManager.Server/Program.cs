@@ -124,8 +124,8 @@ using (var scope = app.Services.CreateScope())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
