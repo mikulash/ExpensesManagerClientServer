@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using ExpensesManager.Server.DTOs;
 using ExpensesManager.Server.Facades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -11,8 +12,8 @@ namespace ExpensesManager.Server.Controllers;
 [Authorize]
 public class UserController(UserFacade userFacade, UserManager<IdentityUser> userManager) : ApiControllerBase
 {
-    [HttpGet("GetUser")]
-    public async Task<IActionResult> GetUser()
+    [HttpPost]
+    public async Task<ActionResult<UserDto>> GetUser()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (userId == null) return Unauthorized(new { Success = false, Message = "Unauthorized" });
@@ -20,14 +21,12 @@ public class UserController(UserFacade userFacade, UserManager<IdentityUser> use
         var user = await userManager.FindByIdAsync(userId);
         if (user == null) return NotFound(new { Success = false, Message = "User not found" });
 
-        var userDetails = new
+        var userResponse = new UserDto
         {
-            user.Id,
-            user.UserName,
-            user.Email
+            UserId = userId, Username = user.UserName, Email = user.Email
         };
 
-        return Ok(new { Success = true, User = userDetails });
+        return Ok(userResponse);
     }
 
     // [HttpGet("User")]

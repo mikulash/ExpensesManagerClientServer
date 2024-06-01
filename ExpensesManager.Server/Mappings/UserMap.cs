@@ -11,7 +11,6 @@ public class UserMap
         {
             UserId = user.UserId.ToString(),
             Username = user.Username,
-            Password = user.Password,
             Email = user.Email
         };
     }
@@ -22,7 +21,6 @@ public class UserMap
         {
             UserId = int.Parse(userDto.UserId),
             Username = userDto.Username,
-            Password = userDto.Password,
             Email = userDto.Email
         };
     }

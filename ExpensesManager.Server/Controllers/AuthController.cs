@@ -23,7 +23,8 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RegistrationDto request)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<RegistrationSuccessDto>> Register(RegistrationDto request)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -36,7 +37,7 @@ public class AuthController : ControllerBase
         if (!result.Succeeded) return BadRequest(result.Errors);
 
         await _signInManager.SignInAsync(user, false);
-        return Ok(new { Success = true, Message = "Registration successful" });
+        return Ok(new RegistrationSuccessDto("User created successfully"));
     }
 
     [HttpPost("login")]
@@ -53,11 +54,5 @@ public class AuthController : ControllerBase
         var token = _jwtTokenGenerator.GenerateToken(user);
         return Ok(new LoginSuccessDto { Token = token, Message = "Login successful" });
     }
-    // TODO delete or invalidate token
-    // [HttpPost("logout")]
-    // public async Task<IActionResult> Logout()
-    // {
-    //     await _signInManager.SignOutAsync();
-    //     return Ok(new { Success = true, Message = "Logged out successfully" });
-    // }
+
 }

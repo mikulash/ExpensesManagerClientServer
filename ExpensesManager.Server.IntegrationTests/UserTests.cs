@@ -1,4 +1,6 @@
-﻿using ExpensesManager.Server.DTOs.Auth;
+﻿using System.Net.Http.Headers;
+using ExpensesManager.Server.DTOs;
+using ExpensesManager.Server.DTOs.Auth;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit.Abstractions;
 
@@ -20,8 +22,9 @@ public class UserTests : IClassFixture<WebApplicationFactory<Program>>
     [Fact]
     public void UserFirstAccess()
     {
-        var email = "test@test.cz";
-        var password = "Test1234";
+        var randPrefix = Guid.NewGuid().ToString().Substring(0, 3);
+        var email = randPrefix + "test@test.cz";
+        var password = "Test_1234";
         var registration = new RegistrationDto
         {
             Email = email,
@@ -30,6 +33,7 @@ public class UserTests : IClassFixture<WebApplicationFactory<Program>>
         };
 
         var response = Client.PostAsJsonAsync("/api/Auth/register", registration).Result;
+        var registerResult = response.Content.ReadFromJsonAsync<RegistrationSuccessDto>().Result;
         Assert.True(response.IsSuccessStatusCode);
 
         var login = new LoginDto
@@ -40,6 +44,16 @@ public class UserTests : IClassFixture<WebApplicationFactory<Program>>
 
         response = Client.PostAsJsonAsync("/api/Auth/login", login).Result;
         Assert.True(response.IsSuccessStatusCode);
+        var loginResult = response.Content.ReadFromJsonAsync<LoginSuccessDto>().Result;
+        Assert.NotNull(loginResult);
+        Assert.NotNull(loginResult.Token);
 
+        Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginResult.Token);
+
+        response = Client.PostAsJsonAsync("/api/User", login).Result;
+        Assert.True(response.IsSuccessStatusCode);
+        var userResult = response.Content.ReadFromJsonAsync<UserDto>().Result;
+        Assert.NotNull(userResult);
+        Assert.Equal(email, userResult.Email);
     }
 }
