@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpensesManager.Server.IntegrationTests;
 
+// ReSharper disable once ClassNeverInstantiated.Global
 public class CustomWebApplicationFactory<TProgram>
     : WebApplicationFactory<TProgram> where TProgram : class
 {
@@ -17,15 +18,15 @@ public class CustomWebApplicationFactory<TProgram>
                 d => d.ServiceType ==
                      typeof(DbContextOptions<ApplicationDbContext>));
 
-            services.Remove(dbContextDescriptor);
+            if (dbContextDescriptor != null) services.Remove(dbContextDescriptor);
 
             var dbConnectionDescriptor = services.SingleOrDefault(
                 d => d.ServiceType ==
                      typeof(DbConnection));
 
-            services.Remove(dbConnectionDescriptor);
+            if (dbConnectionDescriptor != null) services.Remove(dbConnectionDescriptor);
 
-            services.AddSingleton<DbConnection>(container =>
+            services.AddSingleton<DbConnection>(_ =>
             {
                 var connection = new SqliteConnection("DataSource=:memory:");
                 connection.Open();

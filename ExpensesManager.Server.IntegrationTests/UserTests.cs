@@ -13,10 +13,10 @@ public class UserTests : BaseTest
     }
 
     [Fact]
-    public void UserFirstAccess()
+    public async Task UserFirstAccess()
     {
-        var email = "test@test.cz";
-        var password = "Test_1234";
+        const string email = "test@test.cz";
+        const string password = "Test_1234";
         var registration = new RegistrationDto
         {
             Email = email,
@@ -24,9 +24,8 @@ public class UserTests : BaseTest
             ConfirmPassword = password
         };
 
-        var response = Client.PostAsJsonAsync("/api/Auth/register", registration).Result;
+        var response = await Client.PostAsJsonAsync("/api/Auth/register", registration);
         Assert.True(response.IsSuccessStatusCode);
-        var registerResult = response.Content.ReadFromJsonAsync<RegistrationSuccessDto>().Result;
 
         var login = new LoginDto
         {
@@ -34,17 +33,18 @@ public class UserTests : BaseTest
             Password = password
         };
 
-        response = Client.PostAsJsonAsync("/api/Auth/login", login).Result;
+        response = await Client.PostAsJsonAsync("/api/Auth/login", login);
         Assert.True(response.IsSuccessStatusCode);
-        var loginResult = response.Content.ReadFromJsonAsync<LoginSuccessDto>().Result;
+
+        var loginResult = await response.Content.ReadFromJsonAsync<LoginSuccessDto>();
         Assert.NotNull(loginResult);
         Assert.NotNull(loginResult.Token);
 
         Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginResult.Token);
 
-        response = Client.PostAsJsonAsync("/api/User", login).Result;
+        response = await Client.PostAsJsonAsync("/api/User", login);
         Assert.True(response.IsSuccessStatusCode);
-        var userResult = response.Content.ReadFromJsonAsync<UserDto>().Result;
+        var userResult = await response.Content.ReadFromJsonAsync<UserDto>();
         Assert.NotNull(userResult);
         Assert.Equal(email, userResult.Email);
     }

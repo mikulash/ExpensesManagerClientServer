@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Xunit.Abstractions;
+﻿using Xunit.Abstractions;
 
 namespace ExpensesManager.Server.IntegrationTests;
 
@@ -14,12 +13,6 @@ public class BaseTest : IClassFixture<CustomWebApplicationFactory<Program>>
     {
         Client = factory.CreateClient();
         TestOutputHelper = testOutputHelper;
-    }
-
-
-    public static T Deserialize<T>(string json)
-    {
-        return JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ??
-               throw new Exception("Deserialization failed");
+        Factory = factory;
     }
 }
