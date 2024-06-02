@@ -51,13 +51,13 @@ public class UserTests : BaseTest
         Assert.NotEmpty(categoriesResponse);
 
         var incomes = MockDataFactory.CreateIncomes(userDto.UserId, categoriesResponse[2].Id);
-        // var expenses = MockDataFactory.CreateExpenses(user.Id, categoriesResponse[0].Id);
+        var expenses = MockDataFactory.CreateExpenses(userDto.UserId, categoriesResponse[0].Id);
 
         var response = await Client.PostAsJsonAsync("/api/Income/AddOrUpdate", incomes[0]);
         Assert.True(response.IsSuccessStatusCode);
 
-        // response = await Client.PostAsJsonAsync("/api/Expense/AddOrUpdate", expenses[0]);
-        // Assert.True(response.IsSuccessStatusCode);
+        response = await Client.PostAsJsonAsync("/api/Expense/AddOrUpdate", expenses[0]);
+        Assert.True(response.IsSuccessStatusCode);
 
         var incomesResponse = await Client.GetFromJsonAsync<List<IncomeDto>>("/api/Income/GetAll");
         Assert.NotNull(incomesResponse);
