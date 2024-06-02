@@ -9,7 +9,6 @@ Uses controller -> facade -> service -> repository pattern.
 2. Facade:
    Simplifies the interaction with the service layer.
    Provides a unified interface for the controller, often aggregating calls to multiple services.
-   Helps in managing complex workflows and business processes.
 3. Service:
    Contains business logic.
    Acts as an intermediary between the controller and the repository.
@@ -18,6 +17,10 @@ Uses controller -> facade -> service -> repository pattern.
    Manages data access and persistence.
    Encapsulates the logic required to query, save, and update data.
    Abstracts the data access details, making it easier to swap out data storage implementations if needed.
+
+## DB seeding
+
+on first run, the db will be seeded with one user, his default categories, some incomes and expenses
 
 ## how to
 

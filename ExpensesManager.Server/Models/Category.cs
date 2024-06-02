@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
+namespace ExpensesManager.Server.Models;
+
 public class Category
 {
     [Key] public int Id { get; set; }

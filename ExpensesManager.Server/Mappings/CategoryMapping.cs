@@ -1,4 +1,5 @@
 ﻿using ExpensesManager.Server.DTOs;
+using ExpensesManager.Server.Models;
 
 namespace ExpensesManager.Server.Mappings;
 

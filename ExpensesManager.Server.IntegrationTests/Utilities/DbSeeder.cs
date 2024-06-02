@@ -1,4 +1,5 @@
 ﻿using ExpensesManager.Server.Data;
+using ExpensesManager.Server.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace ExpensesManager.Server.IntegrationTests.Utilities;
@@ -22,6 +23,8 @@ public class DbSeeder
         {
             new() { UserName = "testuser", Email = "testuser@example.com" }
         };
+
+
 
         context.Users.AddRange(users);
 
