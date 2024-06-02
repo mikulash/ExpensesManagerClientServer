@@ -15,7 +15,7 @@ public class ExpenseRepository(ApplicationDbContext context)
         return context.Expenses.FirstOrDefault(e => e.Id == expenseId);
     }
 
-    public bool SetExpense(string userId, Expense expense)
+    public bool SetExpense(Expense expense)
     {
         // add or update expense
         var isExpensePresent = context.Expenses.Any(e => e.Id == expense.Id);
@@ -23,6 +23,14 @@ public class ExpenseRepository(ApplicationDbContext context)
             context.Expenses.Update(expense);
         else
             context.Expenses.Add(expense);
+
+        var changesSaved = context.SaveChanges() > 0;
+        return changesSaved;
+    }
+
+    public bool SetExpenses(List<Expense> expenses)
+    {
+        foreach (var expense in expenses) SetExpense(expense);
 
         var changesSaved = context.SaveChanges() > 0;
         return changesSaved;

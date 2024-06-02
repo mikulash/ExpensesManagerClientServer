@@ -19,6 +19,11 @@ public class IncomeService(IncomeRepository incomeRepository)
         return incomeRepository.SetIncome(income);
     }
 
+    public bool SetIncomes(List<Income> incomes)
+    {
+        return incomeRepository.SetIncomes(incomes);
+    }
+
     public bool DeleteIncome(int incomeId)
     {
         return incomeRepository.DeleteIncome(incomeId);

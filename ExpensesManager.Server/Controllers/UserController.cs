@@ -64,6 +64,27 @@ public class UserController(UserFacade userFacade, UserManager<IdentityUser> use
         if (string.IsNullOrEmpty(userId)) return Unauthorized(new { Success = false, Message = "Unauthorized" });
 
         var expenses = userFacade.GetFilteredTransactions(userId, categories, dateFrom, dateTo);
-        return Ok(expenses);
+        return FacadeResponseToActionResult(expenses);
+    }
+
+    [HttpPost("ExportData")]
+    public ActionResult<UserTransactionsDto> ExportData()
+    {
+        var userId = GetUserId();
+        if (string.IsNullOrEmpty(userId)) return Unauthorized(new { Success = false, Message = "Unauthorized" });
+        var retval = userFacade.GetAllTransactions(userId);
+        return FacadeResponseToActionResult(retval);
+    }
+
+    [HttpPost("ImportData")]
+    public ActionResult<bool> ImportData(UserTransactionsDto userTransactionsDto)
+    {
+        var userId = GetUserId();
+        if (string.IsNullOrEmpty(userId)) return Unauthorized(new { Success = false, Message = "Unauthorized" });
+
+        if (userId != userTransactionsDto.UserId) return BadRequest(new { Success = false, Message = "Unauthorized" });
+
+        var retval = userFacade.ImportData(userTransactionsDto);
+        return FacadeResponseToActionResult(retval);
     }
 }

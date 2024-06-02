@@ -15,9 +15,14 @@ public class ExpenseService(ExpenseRepository expenseRepository)
         return expenseRepository.GetExpenseById(expenseId);
     }
 
-    public bool SetExpense(string userId, Expense expense)
+    public bool SetExpense(Expense expense)
     {
-        return expenseRepository.SetExpense(userId, expense);
+        return expenseRepository.SetExpense(expense);
+    }
+
+    public bool SetExpenses(List<Expense> expenses)
+    {
+        return expenseRepository.SetExpenses(expenses);
     }
 
     public bool DeleteExpense(int expenseId)

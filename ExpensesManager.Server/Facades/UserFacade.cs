@@ -70,5 +70,43 @@ public class UserFacade(UserService userService, IncomeService incomeService, Ex
         return retval.SetOk(userTransactions);
     }
 
+    public FacadeResponse<UserTransactionsDto> GetAllTransactions(string userId)
+    {
+        var retval = new FacadeResponse<UserTransactionsDto>();
+
+        var incomes = incomeService.GetAllIncomesByUser(userId);
+        var incomesDto = incomes.Select(IncomeMapping.ToIncomeDto).ToList();
+        var expenses = expenseService.GetAllExpensesByUser(userId);
+        var expensesDto = expenses.Select(ExpenseMapping.ToExpenseDto).ToList();
+
+        var totalIncome = incomes.Sum(i => i.Amount);
+        var totalExpense = expenses.Sum(e => e.Amount);
+        var balance = totalIncome - totalExpense;
+
+        var userTransactions = new UserTransactionsDto
+        {
+            UserId = userId,
+            Incomes = incomesDto,
+            Expenses = expensesDto,
+            TotalIncome = totalIncome,
+            TotalExpense = totalExpense,
+            Balance = balance
+        };
+
+        return retval.SetOk(userTransactions);
+    }
+
+    public FacadeResponse<bool> ImportData(UserTransactionsDto transactions)
+    {
+        var retval = new FacadeResponse<bool>();
+
+        var incomes = transactions.Incomes.Select(IncomeMapping.ToIncome).ToList();
+        var expenses = transactions.Expenses.Select(ExpenseMapping.ToExpense).ToList();
+
+        var incomeResult = incomeService.SetIncomes(incomes);
+        var expenseResult = expenseService.SetExpenses(expenses);
+
+        return retval.SetOk(incomeResult && expenseResult);
+    }
     // todo statistics
 }

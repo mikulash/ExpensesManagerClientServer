@@ -27,6 +27,14 @@ public class IncomeRepository(ApplicationDbContext context)
         return changesSaved;
     }
 
+    public bool SetIncomes(List<Income> incomes)
+    {
+        foreach (var income in incomes) SetIncome(income);
+
+        var changesSaved = context.SaveChanges() > 0;
+        return changesSaved;
+    }
+
     public bool DeleteIncome(int incomeId)
     {
         var income = context.Incomes.FirstOrDefault(i => i.Id == incomeId);
