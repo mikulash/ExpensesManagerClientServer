@@ -1,6 +1,7 @@
 ﻿using ExpensesManager.Server.DTOs;
 using ExpensesManager.Server.DTOs.Auth;
 using ExpensesManager.Server.Facades;
+using ExpensesManager.Server.Mappings;
 using ExpensesManager.Server.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -55,7 +56,8 @@ public class AuthController : ApiControllerBase
         if (!result.Succeeded) return BadRequest(new ErrorResponseDto("Invalid login attempt"));
 
         var token = _jwtTokenGenerator.GenerateToken(user);
-        return Ok(new LoginSuccessDto { Token = token, Message = "Login successful" });
+        var userDto = UserMapping.ToUserDto(user);
+        return Ok(new LoginSuccessDto { Token = token, Message = "Login successful", User = userDto });
     }
 
 }
