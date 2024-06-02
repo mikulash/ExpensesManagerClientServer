@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using ExpensesManager.Server.Data;
 using ExpensesManager.Server.IntegrationTests.Utilities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -50,7 +51,8 @@ public class CustomWebApplicationFactory<TProgram>
             db.Database.EnsureCreated();
 
             // Seed the database with initial data
-            DbSeeder.Seed(db);
+            var userManager = scopedServices.GetRequiredService<UserManager<IdentityUser>>();
+            DbSeeder.Seed(db, userManager);
         });
 
         builder.UseEnvironment("Development");

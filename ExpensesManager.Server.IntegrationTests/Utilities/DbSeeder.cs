@@ -1,53 +1,66 @@
 ﻿using ExpensesManager.Server.Data;
 using ExpensesManager.Server.Models;
+using ExpensesManager.Server.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpensesManager.Server.IntegrationTests.Utilities;
 
-public class DbSeeder
+public static class DbSeeder
 {
-    public static void Seed(ApplicationDbContext context)
+    public static void Seed(ApplicationDbContext context, UserManager<IdentityUser> userManager)
     {
-        if (context.Categories.Any()) return; // Database has already been seeded
-
-        var categories = new List<Category>
-        {
-            new() { Name = "Food" },
-            new() { Name = "Utilities" },
-            new() { Name = "Salary" }
-        };
-
-        context.Categories.AddRange(categories);
 
         var users = new List<IdentityUser>
-        {
-            new() { UserName = "testuser", Email = "testuser@example.com" }
-        };
-
-
-
-        context.Users.AddRange(users);
-
-        context.SaveChanges();
-    }
-
-
-    private static List<IdentityUser> CreateUsers()
-    {
-        return new List<IdentityUser>
         {
             new() { UserName = "firstUser", Email = "firstUser@example.com" },
             new() { UserName = "secondUser", Email = "secondUser@example.com" }
         };
-    }
 
-    private static List<Category> CreateCategories(string userId)
-    {
-        return new List<Category>
+        foreach (var user in users)
         {
-            new() { Name = "Food", UserId = userId },
-            new() { Name = "Utilities", UserId = userId },
-            new() { Name = "Salary", UserId = userId }
-        };
+            var result = userManager.CreateAsync(user, "SeededUser123!").Result;
+            if (!result.Succeeded) throw new DbUpdateException("Failed to create seeded user.");
+
+            var categories = CategoryService.CreateDefaultCategories(user.Id);
+            context.Categories.AddRange(categories);
+            context.SaveChanges();
+
+            categories = context.Categories.Where(c => c.UserId == user.Id).ToList();
+
+            var incomes = new List<Income>
+            {
+                new()
+                {
+                    Amount = 1000, CategoryId = categories[2].Id, Date = DateTime.Now, UserId = user.Id,
+                    Description = "Salary"
+                },
+                new()
+                {
+                    Amount = 2000, CategoryId = categories[2].Id, Date = DateTime.Now, UserId = user.Id,
+                    Description = "Salary"
+                }
+            };
+
+            var expenses = new List<Expense>
+            {
+                new()
+                {
+                    Amount = 100, CategoryId = categories[0].Id, Date = DateTime.Now, UserId = user.Id,
+                    Description = "Bread"
+                },
+                new()
+                {
+                    Amount = 200, CategoryId = categories[0].Id, Date = DateTime.Now, UserId = user.Id,
+                    Description = "Vegetables"
+                }
+            };
+
+            context.SaveChanges();
+            context.Incomes.AddRange(incomes);
+            context.Expenses.AddRange(expenses);
+        }
+
+        context.SaveChanges();
     }
 }
