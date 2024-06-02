@@ -30,14 +30,14 @@ public class ExpenseFacade(ExpenseService expenseService)
         return retval.SetOk(expenseDto);
     }
 
-    public FacadeResponse<bool> SetExpense(string userId, ExpenseDto expenseDto)
+    public FacadeResponse<bool> SetExpense(ExpenseDto expenseDto)
     {
         var retval = new FacadeResponse<bool>();
 
         if (expenseDto.UserId.IsNullOrEmpty()) return retval.SetBadRequest("User ID cannot be 0.");
 
         var expense = ExpenseMapping.ToExpense(expenseDto);
-        var result = expenseService.SetExpense(userId, expense);
+        var result = expenseService.SetExpense(expense);
         if (!result) return retval.SetError(500, "Failed to set expense.");
 
         return retval.SetOk(result);

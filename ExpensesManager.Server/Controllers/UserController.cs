@@ -87,4 +87,13 @@ public class UserController(UserFacade userFacade, UserManager<IdentityUser> use
         var retval = userFacade.ImportData(userTransactionsDto);
         return FacadeResponseToActionResult(retval);
     }
+
+    public ActionResult<UserStatisticsDto> GetStatistics()
+    {
+        var userId = GetUserId();
+        if (string.IsNullOrEmpty(userId)) return Unauthorized(new { Success = false, Message = "Unauthorized" });
+
+        var statistics = userFacade.GetStatistics(userId);
+        return FacadeResponseToActionResult(statistics);
+    }
 }

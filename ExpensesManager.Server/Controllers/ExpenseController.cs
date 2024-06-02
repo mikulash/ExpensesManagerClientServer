@@ -21,7 +21,8 @@ public class ExpenseController(ExpenseFacade expenseFacade) : ApiControllerBase
     public ActionResult<bool> Post(ExpenseDto expenseDto)
     {
         var userId = GetUserId();
-        var retval = expenseFacade.SetExpense(userId, expenseDto);
+        if (userId != expenseDto.UserId) return Unauthorized(new { Success = false, Message = "Unauthorized" });
+        var retval = expenseFacade.SetExpense(expenseDto);
         return FacadeResponseToActionResult(retval);
     }
 
