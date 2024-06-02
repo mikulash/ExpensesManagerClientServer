@@ -97,4 +97,27 @@ public class UserController(UserFacade userFacade, UserManager<IdentityUser> use
         var statistics = userFacade.GetStatistics(userId);
         return FacadeResponseToActionResult(statistics);
     }
+
+    [HttpGet("StatsGraph")]
+    public ActionResult<MemoryStream> GetStatsGraph()
+    {
+        var userId = GetUserId();
+        if (string.IsNullOrEmpty(userId)) return Unauthorized(new { Success = false, Message = "Unauthorized" });
+        var retval = userFacade.GetStatsGraph(userId);
+        return FacadeResponseToActionResult(retval);
+    }
+
+    [HttpDelete("DeleteAll")]
+    public ActionResult<bool> DeleteAll()
+    {
+        var userId = GetUserId();
+        if (string.IsNullOrEmpty(userId)) return Unauthorized(new { Success = false, Message = "Unauthorized" });
+
+        var retval = userFacade.DeleteAllTransactions(userId);
+        return FacadeResponseToActionResult(retval);
+    }
+
+
+
+
 }
