@@ -166,6 +166,7 @@ public class UserFacade(UserService userService, IncomeService incomeService, Ex
         plt.Legend.ManualItems.Add(new LegendItem { LabelText = "Balance", FillColor = palette.GetColor(2) });
 
         var ticks = new List<Tick>();
+
         for (var i = 0; i < months.Length; i++) ticks.Add(new Tick(i * 3 + 2, months[i].ToString()));
 
         plt.Axes.Bottom.TickGenerator = new NumericManual(ticks.ToArray());

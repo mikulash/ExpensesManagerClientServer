@@ -29,7 +29,6 @@ public class UserController(UserFacade userFacade, UserManager<IdentityUser> use
         return Ok(userResponse);
     }
 
-
     [HttpGet("Balance")]
     public ActionResult<decimal> GetCurrentUserBalance()
     {
@@ -41,15 +40,17 @@ public class UserController(UserFacade userFacade, UserManager<IdentityUser> use
     }
 
     [HttpGet("TotalIncome")]
-    public ActionResult<decimal> GetTotalIncome(string userId)
+    public ActionResult<decimal> GetTotalIncome()
     {
+        var userId = GetUserId();
         var totalIncome = userFacade.GetTotalIncome(userId);
         return FacadeResponseToActionResult(totalIncome);
     }
 
     [HttpGet("TotalExpense")]
-    public ActionResult<decimal> GetTotalExpense(string userId)
+    public ActionResult<decimal> GetTotalExpense()
     {
+        var userId = GetUserId();
         var totalExpense = userFacade.GetTotalExpense(userId);
         return FacadeResponseToActionResult(totalExpense);
     }
