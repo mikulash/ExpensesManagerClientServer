@@ -88,6 +88,7 @@ public class UserController(UserFacade userFacade, UserManager<IdentityUser> use
         return FacadeResponseToActionResult(retval);
     }
 
+    [HttpGet("Statistics")]
     public ActionResult<UserStatisticsDto> GetStatistics()
     {
         var userId = GetUserId();
