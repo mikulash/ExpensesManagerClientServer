@@ -24,6 +24,11 @@ public class CategoryService(CategoryRepository categoryRepository)
         return categoryRepository.SetCategory(category);
     }
 
+    public bool SetCategories(List<Category> categories)
+    {
+        return categoryRepository.SetCategories(categories);
+    }
+
     public bool DeleteCategory(int categoryId)
     {
         return categoryRepository.DeleteCategory(categoryId);
@@ -32,5 +37,15 @@ public class CategoryService(CategoryRepository categoryRepository)
     public bool DeleteAllCategories(string userId)
     {
         return categoryRepository.DeleteAllCategories(userId);
+    }
+
+    public static List<Category> CreateDefaultCategories(string userId)
+    {
+        return
+        [
+            new Category { Name = "Food", UserId = userId },
+            new Category { Name = "Utilities", UserId = userId },
+            new Category { Name = "Salary", UserId = userId }
+        ];
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Data.Common;
 using ExpensesManager.Server.Data;
+using ExpensesManager.Server.IntegrationTests.Utilities;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +40,17 @@ public class CustomWebApplicationFactory<TProgram>
                 var connection = container.GetRequiredService<DbConnection>();
                 options.UseSqlite(connection);
             });
+
+            var sp = services.BuildServiceProvider();
+
+            using var scope = sp.CreateScope();
+
+            var scopedServices = scope.ServiceProvider;
+            var db = scopedServices.GetRequiredService<ApplicationDbContext>();
+            db.Database.EnsureCreated();
+
+            // Seed the database with initial data
+            DbSeeder.Seed(db);
         });
 
         builder.UseEnvironment("Development");

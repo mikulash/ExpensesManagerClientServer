@@ -38,6 +38,14 @@ public class CategoryRepository(ApplicationDbContext context)
         return changesSaved;
     }
 
+    public bool SetCategories(List<Category> categories)
+    {
+        foreach (var category in categories) SetCategory(category);
+
+        var changesSaved = context.SaveChanges() > 0;
+        return changesSaved;
+    }
+
     public bool DeleteCategory(int categoryId)
     {
         var category = context.Categories.FirstOrDefault(c => c.Id == categoryId);

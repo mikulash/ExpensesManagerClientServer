@@ -2,7 +2,7 @@
 
 namespace ExpensesManager.Server.Services;
 
-public class UserService(IncomeService incomeService, ExpenseService expenseService)
+public class UserService(IncomeService incomeService, ExpenseService expenseService, CategoryService categoryService)
 {
     public decimal GetCurrentBalance(string userId)
     {
@@ -77,5 +77,10 @@ public class UserService(IncomeService incomeService, ExpenseService expenseServ
         return userStatistics;
     }
 
-    // todo statistics
+    public void initNewUser(string userId)
+    {
+        var categories = CategoryService.CreateDefaultCategories(userId);
+        categoryService.SetCategories(categories);
+    }
+
 }

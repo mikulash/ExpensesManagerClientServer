@@ -113,7 +113,8 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
-        DbInitializer.Initialize(context);
+        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+        DbInitializer.Initialize(context, userManager);
     }
     catch (Exception ex)
     {
