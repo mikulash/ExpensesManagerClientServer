@@ -53,4 +53,17 @@ public class UserController(UserFacade userFacade, UserManager<IdentityUser> use
         var totalExpense = userFacade.GetTotalExpense(userId);
         return FacadeResponseToActionResult(totalExpense);
     }
+
+    [HttpGet("FilteredTransactions")]
+    public ActionResult<UserTransactionsDto> GetFilteredExpenses(
+        [FromQuery] List<int>? categories = null,
+        [FromQuery] DateTime? dateFrom = null,
+        [FromQuery] DateTime? dateTo = null)
+    {
+        var userId = GetUserId();
+        if (string.IsNullOrEmpty(userId)) return Unauthorized(new { Success = false, Message = "Unauthorized" });
+
+        var expenses = userFacade.GetFilteredTransactions(userId, categories, dateFrom, dateTo);
+        return Ok(expenses);
+    }
 }

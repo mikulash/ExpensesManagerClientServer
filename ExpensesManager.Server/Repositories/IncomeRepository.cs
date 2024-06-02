@@ -44,4 +44,18 @@ public class IncomeRepository(ApplicationDbContext context)
         var changesSaved = context.SaveChanges() > 0;
         return changesSaved;
     }
+
+    public List<Income> GetIncomesByFilters(string userId, List<int> categoryIds, DateTime? startDate,
+        DateTime? endDate)
+    {
+        var incomes = context.Incomes.Where(i => i.UserId == userId).ToList();
+        if (categoryIds.Count > 0)
+            incomes = incomes.Where(i => categoryIds.Contains(i.CategoryId)).ToList();
+        if (startDate != null)
+            incomes = incomes.Where(i => i.Date >= startDate).ToList();
+        if (endDate != null)
+            incomes = incomes.Where(i => i.Date <= endDate).ToList();
+
+        return incomes;
+    }
 }

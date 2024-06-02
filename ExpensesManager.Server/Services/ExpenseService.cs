@@ -44,4 +44,10 @@ public class ExpenseService(ExpenseRepository expenseRepository)
     {
         return expenseRepository.GetExpensesByAmountRange(userId, minAmount, maxAmount);
     }
+
+    public List<Expense> GetExpensesByFilters(string userId, List<int> categoryIds, DateTime? startDate,
+        DateTime? endDate)
+    {
+        return expenseRepository.GetExpensesByFilters(userId, categoryIds, startDate, endDate);
+    }
 }

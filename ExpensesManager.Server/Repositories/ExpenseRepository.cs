@@ -60,4 +60,18 @@ public class ExpenseRepository(ApplicationDbContext context)
     {
         return context.Expenses.Where(e => e.Amount >= startAmount && e.Amount <= endAmount).ToList();
     }
+
+    public List<Expense> GetExpensesByFilters(string userId, List<int> categoryIds, DateTime? startDate,
+        DateTime? endDate)
+    {
+        var expenses = context.Expenses.Where(e => e.UserId == userId).ToList();
+        if (categoryIds.Count > 0)
+            expenses = expenses.Where(e => categoryIds.Contains(e.CategoryId)).ToList();
+        if (startDate != null)
+            expenses = expenses.Where(e => e.Date >= startDate).ToList();
+        if (endDate != null)
+            expenses = expenses.Where(e => e.Date <= endDate).ToList();
+
+        return expenses;
+    }
 }

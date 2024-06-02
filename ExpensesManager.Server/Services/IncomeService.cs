@@ -28,4 +28,10 @@ public class IncomeService(IncomeRepository incomeRepository)
     {
         return incomeRepository.DeleteAllIncomes(userId);
     }
+
+    public List<Income> GetIncomesByFilters(string userId, List<int> categoryIds, DateTime? startDate,
+        DateTime? endDate)
+    {
+        return incomeRepository.GetIncomesByFilters(userId, categoryIds, startDate, endDate);
+    }
 }
