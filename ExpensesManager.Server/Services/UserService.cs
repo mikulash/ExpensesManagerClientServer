@@ -27,11 +27,6 @@ public class UserService(IncomeService incomeService, ExpenseService expenseServ
         return expenses.Sum(e => e.Amount);
     }
 
-    public UserDto GetUser(string userId)
-    {
-        return new UserDto();
-    }
-
     public UserStatisticsDto GetStatistics(string userId)
     {
         var incomes = incomeService.GetAllIncomesByUser(userId);
@@ -77,7 +72,7 @@ public class UserService(IncomeService incomeService, ExpenseService expenseServ
         return userStatistics;
     }
 
-    public void initNewUser(string userId)
+    public void InitNewUser(string userId)
     {
         var categories = CategoryService.CreateDefaultCategories(userId);
         categoryService.SetCategories(categories);

@@ -11,6 +11,11 @@ namespace ExpensesManager.Server.Facades;
 
 public class UserFacade(UserService userService, IncomeService incomeService, ExpenseService expenseService)
 {
+    public void InitNewUser(string userId)
+    {
+        userService.InitNewUser(userId);
+    }
+
     public FacadeResponse<decimal> GetCurrentBalance(string userId)
     {
         var retval = new FacadeResponse<decimal>();
@@ -35,14 +40,6 @@ public class UserFacade(UserService userService, IncomeService incomeService, Ex
         if (userId.IsNullOrEmpty()) return retval.SetBadRequest("User ID cannot be 0.");
         var totalExpense = userService.GetTotalExpense(userId);
         return retval.SetOk(totalExpense);
-    }
-
-    public FacadeResponse<UserDto> GetUser(string userId)
-    {
-        var retval = new FacadeResponse<UserDto>();
-        if (userId.IsNullOrEmpty()) return retval.SetBadRequest("User ID cannot be 0.");
-        var user = userService.GetUser(userId);
-        return retval.SetOk(user);
     }
 
     public FacadeResponse<UserTransactionsDto> GetFilteredTransactions(string userId, List<int>? categoryIds,
