@@ -1,4 +1,5 @@
-﻿using ExpensesManager.Server.Repositories;
+﻿using ExpensesManager.Server.Models;
+using ExpensesManager.Server.Repositories;
 
 namespace ExpensesManager.Server.Services;
 

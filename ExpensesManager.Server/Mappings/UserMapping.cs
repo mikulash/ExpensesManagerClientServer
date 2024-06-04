@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ExpensesManager.Server.Mappings;
 
-public class UserMapping
+public static class UserMapping
 {
     public static UserDto ToUserDto(IdentityUser user)
     {

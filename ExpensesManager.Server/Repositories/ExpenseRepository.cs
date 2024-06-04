@@ -15,9 +15,13 @@ public class ExpenseRepository(ApplicationDbContext context)
         return context.Expenses.FirstOrDefault(e => e.Id == expenseId);
     }
 
+    /**
+     * Add or update expense
+     * @param expense object
+     * @return bool True if changes saved successfully, false otherwise
+     */
     public bool SetExpense(Expense expense)
     {
-        // add or update expense
         var isExpensePresent = context.Expenses.Any(e => e.Id == expense.Id);
         if (isExpensePresent)
             context.Expenses.Update(expense);

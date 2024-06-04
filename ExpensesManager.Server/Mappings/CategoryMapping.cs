@@ -3,7 +3,7 @@ using ExpensesManager.Server.Models;
 
 namespace ExpensesManager.Server.Mappings;
 
-public class CategoryMapping
+public static class CategoryMapping
 {
     public static CategoryDto ToCategoryDto(Category category)
     {

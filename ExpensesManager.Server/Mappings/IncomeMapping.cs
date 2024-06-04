@@ -1,8 +1,9 @@
 ﻿using ExpensesManager.Server.DTOs;
+using ExpensesManager.Server.Models;
 
 namespace ExpensesManager.Server.Mappings;
 
-public class IncomeMapping
+public static class IncomeMapping
 {
     public static IncomeDto ToIncomeDto(Income income)
     {

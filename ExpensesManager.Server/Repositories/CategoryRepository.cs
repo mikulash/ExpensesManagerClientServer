@@ -26,9 +26,13 @@ public class CategoryRepository(ApplicationDbContext context)
         return context.Categories.FirstOrDefault(c => c.Id == categoryId && c.UserId == userId);
     }
 
+    /**
+     * Add or update category
+     * @param category object
+     * @return bool True if changes saved successfully, false otherwise
+     */
     public bool SetCategory(Category category)
     {
-        // add or update category
         var isCategoryPresent = context.Categories.Any(c => c.Id == category.Id);
         if (isCategoryPresent)
             context.Categories.Update(category);

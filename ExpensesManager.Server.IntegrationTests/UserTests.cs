@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using ExpensesManager.Server.DTOs;
 using ExpensesManager.Server.DTOs.Auth;
+using ExpensesManager.Server.IntegrationTests.Utilities;
 using Microsoft.AspNetCore.Identity;
 using Xunit.Abstractions;
 
@@ -78,9 +79,17 @@ public class UserTests : BaseTest
 
     private async Task RegisterUser(IdentityUser user)
     {
-        var registration = MockDataFactory.CreateRegistrationDto(user.Email, MockDataFactory.password);
-        var response = await Client.PostAsJsonAsync("/api/Auth/register", registration);
-        Assert.True(response.IsSuccessStatusCode);
+        if (user.Email != null)
+        {
+            var registration = MockDataFactory.CreateRegistrationDto(user.Email, MockDataFactory.password);
+            var response = await Client.PostAsJsonAsync("/api/Auth/register", registration);
+            Assert.True(response.IsSuccessStatusCode);
+        }
+        else
+        {
+            throw new ArgumentNullException(nameof(user.Email));
+        }
+
     }
 
 

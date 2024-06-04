@@ -2,6 +2,8 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
+namespace ExpensesManager.Server.Models;
+
 public class Income
 {
     [Key] public int Id { get; set; }

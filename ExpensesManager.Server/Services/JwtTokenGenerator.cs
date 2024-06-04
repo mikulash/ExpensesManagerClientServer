@@ -18,7 +18,7 @@ public class JwtTokenGenerator
     public string GenerateToken(IdentityUser user)
     {
         var jwtSettings = _configuration.GetSection("Jwt");
-        var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]);
+        var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"] ?? string.Empty);
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -28,7 +28,7 @@ public class JwtTokenGenerator
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Name, user.UserName)
             }),
-            Expires = DateTime.UtcNow.AddMinutes(double.Parse(jwtSettings["ExpirationMinutes"])),
+            Expires = DateTime.UtcNow.AddMinutes(double.Parse(jwtSettings["ExpirationMinutes"] ?? string.Empty)),
             Issuer = jwtSettings["Issuer"],
             Audience = jwtSettings["Audience"],
             SigningCredentials =

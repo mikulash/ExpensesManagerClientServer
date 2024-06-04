@@ -2,7 +2,7 @@
 using ExpensesManager.Server.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace ExpensesManager.Server.IntegrationTests;
+namespace ExpensesManager.Server.IntegrationTests.Utilities;
 
 public static class MockDataFactory
 {

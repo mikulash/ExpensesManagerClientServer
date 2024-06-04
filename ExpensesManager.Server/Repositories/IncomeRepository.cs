@@ -1,4 +1,5 @@
 ﻿using ExpensesManager.Server.Data;
+using ExpensesManager.Server.Models;
 
 namespace ExpensesManager.Server.Repositories;
 
@@ -14,9 +15,13 @@ public class IncomeRepository(ApplicationDbContext context)
         return context.Incomes.FirstOrDefault(i => i.Id == incomeId);
     }
 
+    /**
+     * Add or update income
+     * @param income object
+     * @return bool True if changes saved successfully, false otherwise
+     */
     public bool SetIncome(Income income)
     {
-        // add or update income
         var isIncomePresent = context.Incomes.Any(i => i.Id == income.Id);
         if (isIncomePresent)
             context.Incomes.Update(income);
