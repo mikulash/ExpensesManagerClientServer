@@ -9,31 +9,26 @@ using Microsoft.EntityFrameworkCore;
 namespace ExpensesManager.Server.IntegrationTests;
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public class CustomWebApplicationFactory<TProgram>
-    : WebApplicationFactory<TProgram> where TProgram : class
+public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
 {
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    private DbConnection? _connection;
+
+    protected override IHost CreateHost(IHostBuilder builder)
     {
         builder.ConfigureServices(services =>
         {
-            var dbContextDescriptor = services.SingleOrDefault(
-                d => d.ServiceType ==
-                     typeof(DbContextOptions<ApplicationDbContext>));
-
+            var dbContextDescriptor =
+                services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
             if (dbContextDescriptor != null) services.Remove(dbContextDescriptor);
 
-            var dbConnectionDescriptor = services.SingleOrDefault(
-                d => d.ServiceType ==
-                     typeof(DbConnection));
-
+            var dbConnectionDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbConnection));
             if (dbConnectionDescriptor != null) services.Remove(dbConnectionDescriptor);
 
             services.AddSingleton<DbConnection>(_ =>
             {
-                var connection = new SqliteConnection("DataSource=:memory:");
-                connection.Open();
-
-                return connection;
+                _connection = new SqliteConnection("DataSource=:memory:");
+                _connection.Open();
+                return _connection;
             });
 
             services.AddDbContext<ApplicationDbContext>((container, options) =>
@@ -50,11 +45,27 @@ public class CustomWebApplicationFactory<TProgram>
             var db = scopedServices.GetRequiredService<ApplicationDbContext>();
             db.Database.EnsureCreated();
 
-            // Seed the database with initial data
             var userManager = scopedServices.GetRequiredService<UserManager<IdentityUser>>();
             DbSeeder.Seed(db, userManager);
         });
 
         builder.UseEnvironment("Development");
+
+        return base.CreateHost(builder);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        if (disposing) _connection?.Dispose();
+    }
+
+    public async Task ResetDatabaseAsync()
+    {
+        using var scope = Services.CreateScope();
+        var scopedServices = scope.ServiceProvider;
+        var db = scopedServices.GetRequiredService<ApplicationDbContext>();
+        await db.Database.EnsureDeletedAsync();
+        await db.Database.EnsureCreatedAsync();
     }
 }

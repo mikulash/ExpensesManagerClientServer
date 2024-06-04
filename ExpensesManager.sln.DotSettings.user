@@ -24,6 +24,11 @@
     &lt;TestId&gt;xUnit::F24F9F77-279C-4017-AD08-849EA7A35ACB::net8.0::ExpensesManager.Server.IntegrationTests.UserTests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=79b9a3e3_002D2aa1_002D49b7_002D8f29_002D97bd6a960ee8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="UserTests #5" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::F24F9F77-279C-4017-AD08-849EA7A35ACB::net8.0::ExpensesManager.Server.IntegrationTests.UserTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8a6d60b3_002D0672_002D4a5d_002D9c31_002D2b9ea2853980/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="UserTests #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::F24F9F77-279C-4017-AD08-849EA7A35ACB::net8.0::ExpensesManager.Server.IntegrationTests.UserTests&lt;/TestId&gt;&#xD;
@@ -54,9 +59,10 @@
     &lt;TestId&gt;xUnit::F24F9F77-279C-4017-AD08-849EA7A35ACB::net8.0::ExpensesManager.Server.IntegrationTests.UserTests.UserSetsTransactionsToPredefinedCategories&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c276e300_002Dd9df_002D4ad5_002Da368_002D882c8263d368/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="UserTests #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c276e300_002Dd9df_002D4ad5_002Da368_002D882c8263d368/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="UserTests #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::F24F9F77-279C-4017-AD08-849EA7A35ACB::net8.0::ExpensesManager.Server.IntegrationTests.UserTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::F24F9F77-279C-4017-AD08-849EA7A35ACB::net8.0::ExpensesManager.Server.IntegrationTests.NewUserTests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c53a3f5a_002Dc68b_002D4077_002Da7d7_002Df93e4cf18bb7/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="UserSetsTransactionsToCustomCategories #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
@@ -74,8 +80,8 @@
     &lt;TestId&gt;xUnit::F24F9F77-279C-4017-AD08-849EA7A35ACB::net8.0::ExpensesManager.Server.IntegrationTests.UserTests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	
-	
-	
-	
+
+
+
+
 	</wpf:ResourceDictionary>
