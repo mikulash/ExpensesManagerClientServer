@@ -6,7 +6,16 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ExpensesManager.Server.Facades;
 
-public class IncomeFacade(IncomeService incomeService)
+public interface IIncomeFacade
+{
+    FacadeResponse<List<IncomeDto>> GetAllIncomesByUser(string userId);
+    FacadeResponse<IncomeDto> GetIncomeById(int incomeId);
+    FacadeResponse<IncomeDto> SetIncome(IncomeDto incomeDto);
+    FacadeResponse<bool> DeleteIncome(int incomeId);
+    FacadeResponse<bool> DeleteAllIncomes(string userId);
+}
+
+public class IncomeFacade(IIncomeService incomeService) : IIncomeFacade
 {
     public FacadeResponse<List<IncomeDto>> GetAllIncomesByUser(string userId)
     {

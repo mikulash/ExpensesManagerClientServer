@@ -3,7 +3,18 @@ using ExpensesManager.Server.Repositories;
 
 namespace ExpensesManager.Server.Services;
 
-public class IncomeService(IncomeRepository incomeRepository)
+public interface IIncomeService
+{
+    List<Income> GetAllIncomesByUser(string userId);
+    Income? GetIncomeById(int incomeId);
+    bool SetIncome(Income income);
+    bool SetIncomes(List<Income> incomes);
+    bool DeleteIncome(int incomeId);
+    bool DeleteAllIncomes(string userId);
+    List<Income> GetIncomesByFilters(string userId, List<int> categoryIds, DateTime? startDate, DateTime? endDate);
+}
+
+public class IncomeService(IIncomeRepository incomeRepository) : IIncomeService
 {
     public List<Income> GetAllIncomesByUser(string userId)
     {

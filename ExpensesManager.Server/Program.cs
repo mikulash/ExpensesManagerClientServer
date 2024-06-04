@@ -59,23 +59,23 @@ var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]);
 builder.Services.AddSingleton<JwtTokenGenerator>();
 
 // add expense services
-builder.Services.AddScoped<ExpenseRepository>();
-builder.Services.AddScoped<ExpenseService>();
-builder.Services.AddScoped<ExpenseFacade>();
+builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
+builder.Services.AddScoped<IExpenseService, ExpenseService>();
+builder.Services.AddScoped<IExpenseFacade, ExpenseFacade>();
 
 // add income services
-builder.Services.AddScoped<IncomeRepository>();
-builder.Services.AddScoped<IncomeService>();
-builder.Services.AddScoped<IncomeFacade>();
+builder.Services.AddScoped<IIncomeRepository, IncomeRepository>();
+builder.Services.AddScoped<IIncomeService, IncomeService>();
+builder.Services.AddScoped<IIncomeFacade, IncomeFacade>();
 
 // add category services
-builder.Services.AddScoped<CategoryRepository>();
-builder.Services.AddScoped<CategoryService>();
-builder.Services.AddScoped<CategoryFacade>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICategoryFacade, CategoryFacade>();
 
 // add user services
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<UserFacade>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserFacade, UserFacade>();
 
 builder.Services.AddAuthentication(options =>
     {

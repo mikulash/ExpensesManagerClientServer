@@ -3,7 +3,18 @@ using ExpensesManager.Server.Models;
 
 namespace ExpensesManager.Server.Repositories;
 
-public class CategoryRepository(ApplicationDbContext context)
+public interface ICategoryRepository
+{
+    List<Category> GetAllDefaultCategories();
+    List<Category> GetAllCategoriesByUser(string userId, bool includeDefaultCategories = true);
+    Category? GetCategoryById(int categoryId, string userId);
+    bool SetCategory(Category category);
+    bool SetCategories(List<Category> categories);
+    bool DeleteCategory(int categoryId);
+    bool DeleteAllCategories(string userId);
+}
+
+public class CategoryRepository(ApplicationDbContext context) : ICategoryRepository
 {
     public List<Category> GetAllDefaultCategories()
     {

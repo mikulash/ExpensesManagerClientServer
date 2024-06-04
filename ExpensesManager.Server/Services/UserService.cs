@@ -2,7 +2,17 @@
 
 namespace ExpensesManager.Server.Services;
 
-public class UserService(IncomeService incomeService, ExpenseService expenseService, CategoryService categoryService)
+public interface IUserService
+{
+    decimal GetCurrentBalance(string userId);
+    decimal GetTotalIncome(string userId);
+    decimal GetTotalExpense(string userId);
+    UserStatisticsDto GetStatistics(string userId);
+    void InitNewUser(string userId);
+}
+
+public class UserService(IIncomeService incomeService, IExpenseService expenseService, ICategoryService categoryService)
+    : IUserService
 {
     public decimal GetCurrentBalance(string userId)
     {

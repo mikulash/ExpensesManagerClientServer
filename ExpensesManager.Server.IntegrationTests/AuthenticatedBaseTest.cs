@@ -12,7 +12,7 @@ public class AuthenticatedBaseTest : BaseTest
 {
     protected UserDto User;
 
-    public AuthenticatedBaseTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper testOutputHelper) :
+    protected AuthenticatedBaseTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper testOutputHelper) :
         base(factory, testOutputHelper)
     {
         Factory.ResetDatabaseAsync().GetAwaiter().GetResult(); // Reset the database before each test

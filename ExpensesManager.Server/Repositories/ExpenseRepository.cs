@@ -3,7 +3,21 @@ using ExpensesManager.Server.Models;
 
 namespace ExpensesManager.Server.Repositories;
 
-public class ExpenseRepository(ApplicationDbContext context)
+public interface IExpenseRepository
+{
+    List<Expense> GetAllExpensesByUser(string userId);
+    Expense? GetExpenseById(int expenseId);
+    bool SetExpense(Expense expense);
+    bool SetExpenses(List<Expense> expenses);
+    bool DeleteExpense(int expenseId);
+    bool DeleteAllExpenses(string userId);
+    List<Expense> GetExpensesByCategory(string userId, int categoryId);
+    List<Expense> GetExpensesByDateRange(string userId, DateTime startDate, DateTime endDate);
+    List<Expense> GetExpensesByAmountRange(string userId, decimal startAmount, decimal endAmount);
+    List<Expense> GetExpensesByFilters(string userId, List<int> categoryIds, DateTime? startDate, DateTime? endDate);
+}
+
+public class ExpenseRepository(ApplicationDbContext context) : IExpenseRepository
 {
     public List<Expense> GetAllExpensesByUser(string userId)
     {

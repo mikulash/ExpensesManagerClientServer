@@ -3,7 +3,18 @@ using ExpensesManager.Server.Models;
 
 namespace ExpensesManager.Server.Repositories;
 
-public class IncomeRepository(ApplicationDbContext context)
+public interface IIncomeRepository
+{
+    List<Income> GetAllIncomesByUser(string userId);
+    Income? GetIncomeById(int incomeId);
+    bool SetIncome(Income income);
+    bool SetIncomes(List<Income> incomes);
+    bool DeleteIncome(int incomeId);
+    bool DeleteAllIncomes(string userId);
+    List<Income> GetIncomesByFilters(string userId, List<int> categoryIds, DateTime? startDate, DateTime? endDate);
+}
+
+public class IncomeRepository(ApplicationDbContext context) : IIncomeRepository
 {
     public List<Income> GetAllIncomesByUser(string userId)
     {

@@ -6,7 +6,19 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ExpensesManager.Server.Facades;
 
-public class ExpenseFacade(ExpenseService expenseService)
+public interface IExpenseFacade
+{
+    FacadeResponse<List<ExpenseDto>> GetAllExpensesByUser(string userId);
+    FacadeResponse<ExpenseDto> GetExpenseById(int expense);
+    FacadeResponse<ExpenseDto> SetExpense(ExpenseDto expenseDto);
+    FacadeResponse<bool> DeleteExpense(int expenseId);
+    FacadeResponse<bool> DeleteAllExpenses(string userId);
+    FacadeResponse<List<ExpenseDto>> GetExpensesByCategory(string userId, int categoryId);
+    FacadeResponse<List<ExpenseDto>> GetExpensesByDateRange(string userId, DateTime startDate, DateTime endDate);
+    FacadeResponse<List<ExpenseDto>> GetExpensesByAmountRange(string userId, decimal minAmount, decimal maxAmount);
+}
+
+public class ExpenseFacade(IExpenseService expenseService) : IExpenseFacade
 {
     public FacadeResponse<List<ExpenseDto>> GetAllExpensesByUser(string userId)
     {

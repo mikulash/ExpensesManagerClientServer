@@ -9,7 +9,25 @@ using ScottPlot.TickGenerators;
 
 namespace ExpensesManager.Server.Facades;
 
-public class UserFacade(UserService userService, IncomeService incomeService, ExpenseService expenseService)
+public interface IUserFacade
+{
+    void InitNewUser(string userId);
+    FacadeResponse<decimal> GetCurrentBalance(string userId);
+    FacadeResponse<decimal> GetTotalIncome(string userId);
+    FacadeResponse<decimal> GetTotalExpense(string userId);
+
+    FacadeResponse<UserTransactionsDto> GetFilteredTransactions(string userId, List<int>? categoryIds,
+        DateTime? dateFrom, DateTime? dateTo);
+
+    FacadeResponse<UserTransactionsDto> GetAllTransactions(string userId);
+    FacadeResponse<bool> ImportData(UserTransactionsDto transactions);
+    FacadeResponse<UserStatisticsDto> GetStatistics(string userId);
+    FacadeResponse<bool> DeleteAllTransactions(string userId);
+    FacadeResponse<MemoryStream> GetStatsGraph(string userId);
+}
+
+public class UserFacade(IUserService userService, IIncomeService incomeService, IExpenseService expenseService)
+    : IUserFacade
 {
     public void InitNewUser(string userId)
     {

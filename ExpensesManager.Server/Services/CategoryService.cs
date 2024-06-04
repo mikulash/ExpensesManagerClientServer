@@ -3,13 +3,18 @@ using ExpensesManager.Server.Repositories;
 
 namespace ExpensesManager.Server.Services;
 
-public class CategoryService(CategoryRepository categoryRepository)
+public interface ICategoryService
 {
-    public List<Category> GetAllDefaultCategories()
-    {
-        return categoryRepository.GetAllDefaultCategories();
-    }
+    List<Category> GetAllCategoriesByUser(string userId);
+    Category? GetCategoryById(int categoryId, string userId);
+    bool SetCategory(Category category);
+    bool SetCategories(List<Category> categories);
+    bool DeleteCategory(int categoryId);
+    bool DeleteAllCategories(string userId);
+}
 
+public class CategoryService(ICategoryRepository categoryRepository) : ICategoryService
+{
     public List<Category> GetAllCategoriesByUser(string userId)
     {
         return categoryRepository.GetAllCategoriesByUser(userId);

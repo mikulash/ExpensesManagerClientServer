@@ -8,7 +8,7 @@ namespace ExpensesManager.Server.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class IncomeController(IncomeFacade incomeFacade) : ApiControllerBase
+public class IncomeController(IIncomeFacade incomeFacade) : ApiControllerBase
 {
     [HttpGet]
     public ActionResult<IncomeDto> Get(int id)

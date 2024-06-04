@@ -15,10 +15,10 @@ public class AuthController : ApiControllerBase
     private readonly JwtTokenGenerator _jwtTokenGenerator;
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
-    private readonly UserFacade _userFacade;
+    private readonly IUserFacade _userFacade;
 
     public AuthController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,
-        JwtTokenGenerator jwtTokenGenerator, UserFacade userFacade)
+        JwtTokenGenerator jwtTokenGenerator, IUserFacade userFacade)
     {
         _userManager = userManager;
         _signInManager = signInManager;

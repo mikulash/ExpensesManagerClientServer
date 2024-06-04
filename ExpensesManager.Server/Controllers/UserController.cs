@@ -10,7 +10,7 @@ namespace ExpensesManager.Server.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class UserController(UserFacade userFacade, UserManager<IdentityUser> userManager) : ApiControllerBase
+public class UserController(IUserFacade userFacade, UserManager<IdentityUser> userManager) : ApiControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<UserDto>> GetUser()

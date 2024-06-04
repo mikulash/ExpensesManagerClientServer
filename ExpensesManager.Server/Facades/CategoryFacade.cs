@@ -5,7 +5,16 @@ using ExpensesManager.Server.Services;
 
 namespace ExpensesManager.Server.Facades;
 
-public class CategoryFacade(CategoryService categoryService)
+public interface ICategoryFacade
+{
+    FacadeResponse<List<CategoryDto>> GetAllCategoriesByUser(string userId);
+    FacadeResponse<CategoryDto> GetCategoryById(int categoryId, string userId);
+    FacadeResponse<CategoryDto> SetCategory(CategoryDto categoryDto, string userId);
+    FacadeResponse<bool> DeleteCategory(int categoryId, string userId);
+    FacadeResponse<bool> DeleteAllCategories(string userId);
+}
+
+public class CategoryFacade(ICategoryService categoryService) : ICategoryFacade
 {
     public FacadeResponse<List<CategoryDto>> GetAllCategoriesByUser(string userId)
     {

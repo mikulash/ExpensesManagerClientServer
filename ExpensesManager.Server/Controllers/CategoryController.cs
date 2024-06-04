@@ -8,7 +8,7 @@ namespace ExpensesManager.Server.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class CategoryController(CategoryFacade categoryFacade) : ApiControllerBase
+public class CategoryController(ICategoryFacade categoryFacade) : ApiControllerBase
 {
     [HttpGet]
     public ActionResult<CategoryDto> Get(int id)

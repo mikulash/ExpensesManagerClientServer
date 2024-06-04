@@ -8,7 +8,7 @@ namespace ExpensesManager.Server.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class ExpenseController(ExpenseFacade expenseFacade) : ApiControllerBase
+public class ExpenseController(IExpenseFacade expenseFacade) : ApiControllerBase
 {
     [HttpGet]
     public ActionResult<ExpenseDto> Get(int id)
