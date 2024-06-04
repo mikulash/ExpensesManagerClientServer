@@ -32,17 +32,18 @@ public class IncomeFacade(IncomeService incomeService)
 
     }
 
-    public FacadeResponse<bool> SetIncome(IncomeDto incomeDto)
+    public FacadeResponse<IncomeDto> SetIncome(IncomeDto incomeDto)
     {
-        var retval = new FacadeResponse<bool>();
+        var retval = new FacadeResponse<IncomeDto>();
         if (incomeDto.UserId.IsNullOrEmpty()) return retval.SetBadRequest("User ID cannot be 0.");
 
         var income = IncomeMapping.ToIncome(incomeDto);
 
         var result = incomeService.SetIncome(income);
         if (!result) return retval.SetError(500, "Failed to set income.");
+        var retvalIncomeDto = IncomeMapping.ToIncomeDto(income);
 
-        return retval.SetOk(result);
+        return retval.SetOk(retvalIncomeDto);
     }
 
     public FacadeResponse<bool> DeleteIncome(int incomeId)

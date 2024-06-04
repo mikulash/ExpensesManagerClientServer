@@ -18,7 +18,7 @@ public class ExpenseController(ExpenseFacade expenseFacade) : ApiControllerBase
     }
 
     [HttpPost("AddOrUpdate")]
-    public ActionResult<bool> Post(ExpenseDto expenseDto)
+    public ActionResult<ExpenseDto> Post(ExpenseDto expenseDto)
     {
         var userId = GetUserId();
         if (userId != expenseDto.UserId) return Unauthorized(new { Success = false, Message = "Unauthorized" });

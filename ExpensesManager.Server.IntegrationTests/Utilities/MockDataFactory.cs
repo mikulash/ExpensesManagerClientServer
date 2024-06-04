@@ -6,7 +6,7 @@ namespace ExpensesManager.Server.IntegrationTests.Utilities;
 
 public static class MockDataFactory
 {
-    public static string password = "seededUser123!";
+    public const string password = "seededUser123!";
 
     public static RegistrationDto CreateRegistrationDto(string email, string password)
     {

@@ -26,8 +26,10 @@ public class IncomeController(IncomeFacade incomeFacade) : ApiControllerBase
     }
 
     [HttpPost("AddOrUpdate")]
-    public ActionResult<bool> Post(IncomeDto incomeDto)
+    public ActionResult<IncomeDto> Post(IncomeDto incomeDto)
     {
+        var userId = GetUserId();
+        if (userId != incomeDto.UserId) return Unauthorized(new { Success = false, Message = "Unauthorized" });
         var retval = incomeFacade.SetIncome(incomeDto);
         return FacadeResponseToActionResult(retval);
     }

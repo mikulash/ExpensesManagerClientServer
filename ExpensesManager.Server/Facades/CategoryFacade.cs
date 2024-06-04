@@ -39,8 +39,9 @@ public class CategoryFacade(CategoryService categoryService)
 
         var isSuccess = categoryService.SetCategory(category);
         if (!isSuccess) return retval.SetServerError("Error saving category.");
+        var retvalCategoryDto = CategoryMapping.ToCategoryDto(category);
 
-        return retval.SetOk(categoryDto);
+        return retval.SetOk(retvalCategoryDto);
     }
 
     public FacadeResponse<bool> DeleteCategory(int categoryId, string userId)
