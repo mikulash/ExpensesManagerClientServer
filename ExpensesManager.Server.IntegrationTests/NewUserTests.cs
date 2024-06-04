@@ -31,9 +31,7 @@ public class NewUserTests : BaseTest
 
         Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginResult.Token);
 
-        response = await Client.PostAsJsonAsync("/api/User", login);
-        Assert.True(response.IsSuccessStatusCode);
-        var userResult = await response.Content.ReadFromJsonAsync<UserDto>();
+        var userResult = await Client.GetFromJsonAsync<UserDto>("/api/User");
         Assert.NotNull(userResult);
         Assert.Equal(email, userResult.Email);
     }

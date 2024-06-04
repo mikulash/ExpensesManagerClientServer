@@ -2,6 +2,7 @@
 using ExpensesManager.Server.DTOs;
 using ExpensesManager.Server.DTOs.Auth;
 using ExpensesManager.Server.IntegrationTests.Utilities;
+using ExpensesManager.Server.Mappings;
 using Microsoft.AspNetCore.Identity;
 using Xunit.Abstractions;
 
@@ -18,6 +19,7 @@ public class AuthenticatedBaseTest : BaseTest
         var newUser = MockDataFactory.CreateUsers()[0];
         RegisterUser(newUser).Wait();
         User = LoginUser(newUser).Result;
+        InitUserData().Wait();
     }
 
 
@@ -44,6 +46,40 @@ public class AuthenticatedBaseTest : BaseTest
         {
             throw new ArgumentNullException(nameof(user.Email));
         }
+    }
 
+    private async Task InitUserData()
+    {
+        var categoryId = await GetBaseCategory();
+        await AddIncomes(categoryId);
+        await AddExpenses(categoryId);
+    }
+
+    private async Task<int> GetBaseCategory()
+    {
+        var categoriesResponse = await Client.GetFromJsonAsync<List<CategoryDto>>("/api/Category/GetAll");
+        Assert.NotNull(categoriesResponse);
+        Assert.NotEmpty(categoriesResponse);
+        return categoriesResponse[0].Id;
+    }
+
+    private async Task AddIncomes(int categoryId)
+    {
+        var incomes = MockDataFactory.CreateIncomes(User.UserId, categoryId);
+        foreach (var incomeDto in incomes.Select(IncomeMapping.ToIncomeDto))
+        {
+            var response = await Client.PostAsJsonAsync("/api/Income/AddOrUpdate", incomeDto);
+            Assert.True(response.IsSuccessStatusCode);
+        }
+    }
+
+    private async Task AddExpenses(int categoryId)
+    {
+        var expenses = MockDataFactory.CreateExpenses(User.UserId, categoryId);
+        foreach (var expenseDto in expenses.Select(ExpenseMapping.ToExpenseDto))
+        {
+            var response = await Client.PostAsJsonAsync("/api/Expense/AddOrUpdate", expenseDto);
+            Assert.True(response.IsSuccessStatusCode);
+        }
     }
 }

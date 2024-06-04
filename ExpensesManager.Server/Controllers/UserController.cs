@@ -12,7 +12,7 @@ namespace ExpensesManager.Server.Controllers;
 [Authorize]
 public class UserController(UserFacade userFacade, UserManager<IdentityUser> userManager) : ApiControllerBase
 {
-    [HttpPost]
+    [HttpGet]
     public async Task<ActionResult<UserDto>> GetUser()
     {
         var userId = GetUserId();
@@ -68,7 +68,7 @@ public class UserController(UserFacade userFacade, UserManager<IdentityUser> use
         return FacadeResponseToActionResult(expenses);
     }
 
-    [HttpPost("ExportData")]
+    [HttpGet("ExportData")]
     public ActionResult<UserTransactionsDto> ExportData()
     {
         var userId = GetUserId();
@@ -117,8 +117,5 @@ public class UserController(UserFacade userFacade, UserManager<IdentityUser> use
         var retval = userFacade.DeleteAllTransactions(userId);
         return FacadeResponseToActionResult(retval);
     }
-
-
-
 
 }

@@ -66,6 +66,91 @@ public class UserTests : AuthenticatedBaseTest
         Assert.NotEmpty(incomesResponse);
     }
 
+    [Fact]
+    public async Task UserGetAllData()
+    {
+        var categoriesResponse = await Client.GetFromJsonAsync<List<CategoryDto>>("/api/Category/GetAll");
+        Assert.NotNull(categoriesResponse);
+        Assert.NotEmpty(categoriesResponse);
+
+        var incomesResponse = await Client.GetFromJsonAsync<List<IncomeDto>>("/api/Income/GetAll");
+        Assert.NotNull(incomesResponse);
+        Assert.NotEmpty(incomesResponse);
+
+        var expensesResponse = await Client.GetFromJsonAsync<List<ExpenseDto>>("/api/Expense/GetAll");
+        Assert.NotNull(expensesResponse);
+        Assert.NotEmpty(expensesResponse);
+
+        var exportedDataResponse = await Client.GetFromJsonAsync<UserTransactionsDto>("api/User/ExportData");
+        Assert.NotNull(exportedDataResponse);
+        Assert.NotNull(exportedDataResponse.Incomes);
+        Assert.NotNull(exportedDataResponse.Expenses);
+    }
+
+    [Fact]
+    public async Task UserGetFilteredData()
+    {
+        var categoriesResponse = await Client.GetFromJsonAsync<List<CategoryDto>>("/api/Category/GetAll");
+        Assert.NotNull(categoriesResponse);
+        Assert.NotEmpty(categoriesResponse);
+
+        var incomesResponse = await Client.GetFromJsonAsync<List<IncomeDto>>("/api/Income/GetAll");
+        Assert.NotNull(incomesResponse);
+        Assert.NotEmpty(incomesResponse);
+
+        var expensesResponse = await Client.GetFromJsonAsync<List<ExpenseDto>>("/api/Expense/GetAll");
+        Assert.NotNull(expensesResponse);
+        Assert.NotEmpty(expensesResponse);
+
+        var filteredDataResponse = await Client.GetFromJsonAsync<UserTransactionsDto>("api/User/FilteredTransactions");
+        Assert.NotNull(filteredDataResponse);
+        Assert.NotNull(filteredDataResponse.Incomes);
+        Assert.NotNull(filteredDataResponse.Expenses);
+    }
+
+    [Fact]
+    public async Task UserGetBalance()
+    {
+        var balanceResponse = await Client.GetFromJsonAsync<decimal>("api/User/Balance");
+        Assert.True(balanceResponse >= 0);
+    }
+
+    [Fact]
+    public async Task UserGetTotalIncome()
+    {
+        var totalIncomeResponse = await Client.GetFromJsonAsync<decimal>("api/User/TotalIncome");
+        Assert.True(totalIncomeResponse >= 0);
+    }
+
+    [Fact]
+    public async Task UserGetTotalExpense()
+    {
+        var totalExpenseResponse = await Client.GetFromJsonAsync<decimal>("api/User/TotalExpense");
+        Assert.True(totalExpenseResponse >= 0);
+    }
+
+    [Fact]
+    public async Task UserGetUser()
+    {
+        var userResponse = await Client.GetFromJsonAsync<UserDto>("api/User/");
+        Assert.NotNull(userResponse);
+        Assert.NotNull(userResponse.UserId);
+        Assert.NotNull(userResponse.Username);
+        Assert.NotNull(userResponse.Email);
+    }
+
+    [Fact]
+    public async Task UserDeleteAllData()
+    {
+        var response = await Client.DeleteAsync("api/User/DeleteAll");
+        Assert.True(response.IsSuccessStatusCode);
+
+        var totalExpenseResponse = await Client.GetFromJsonAsync<decimal>("api/User/TotalExpense");
+        Assert.True(totalExpenseResponse == 0);
+    }
+
+
+
 
 
 
