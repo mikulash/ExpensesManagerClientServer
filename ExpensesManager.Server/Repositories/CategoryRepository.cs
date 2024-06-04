@@ -5,7 +5,6 @@ namespace ExpensesManager.Server.Repositories;
 
 public interface ICategoryRepository
 {
-    List<Category> GetAllDefaultCategories();
     List<Category> GetAllCategoriesByUser(string userId, bool includeDefaultCategories = true);
     Category? GetCategoryById(int categoryId, string userId);
     bool SetCategory(Category category);
@@ -16,7 +15,7 @@ public interface ICategoryRepository
 
 public class CategoryRepository(ApplicationDbContext context) : ICategoryRepository
 {
-    public List<Category> GetAllDefaultCategories()
+    private List<Category> GetAllDefaultCategories()
     {
         return context.Categories.Where(c => c.UserId == "").ToList();
     }
