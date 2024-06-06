@@ -2,6 +2,7 @@
 using ExpensesManager.Server.Mappings;
 using ExpensesManager.Server.Models;
 using ExpensesManager.Server.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ExpensesManager.Server.Facades;
@@ -20,7 +21,7 @@ public interface IUserFacade
     FacadeResponse<bool> ImportData(UserTransactionsDto transactions, string userId);
     FacadeResponse<UserStatisticsDto> GetStatistics(string userId);
     FacadeResponse<bool> DeleteAllTransactions(string userId);
-    FacadeResponse<MemoryStream> GetStatsGraph(string userId);
+    FacadeResponse<FileStreamResult> GetStatsGraph(string userId);
 }
 
 public class UserFacade(IUserService userService, IIncomeService incomeService, IExpenseService expenseService)
@@ -147,12 +148,13 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
         return retval.SetOk(incomeResult && expenseResult);
     }
 
-    public FacadeResponse<MemoryStream> GetStatsGraph(string userId)
+    public FacadeResponse<FileStreamResult> GetStatsGraph(string userId)
     {
-        var retval = new FacadeResponse<MemoryStream>();
+        var retval = new FacadeResponse<FileStreamResult>();
         if (userId.IsNullOrEmpty()) return retval.SetUnauthorized(invalidUserIdMessage);
         var statsGraph = userService.GetStatsGraph(userId);
         if (statsGraph == null) return retval.SetNotFound("No data to display");
-        return retval.SetOk(statsGraph);
+        var file = new FileStreamResult(statsGraph, "image/png");
+        return retval.SetOk(file);
     }
 }

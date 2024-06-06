@@ -85,9 +85,9 @@ public class UserController(IUserFacade userFacade) : ApiControllerBase
         return FacadeResponseToActionResult(statistics);
     }
 
-    [HttpGet("StatsGraph")]
+    [HttpGet("StatisticsGraph")]
     [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-    public ActionResult<MemoryStream> GetStatsGraph()
+    public ActionResult<FileStreamResult> GetStatsGraph()
     {
         var userId = GetUserId();
         var retval = userFacade.GetStatsGraph(userId);
