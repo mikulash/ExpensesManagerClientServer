@@ -11,6 +11,8 @@ namespace ExpensesManager.Server.Controllers;
 public class CategoryController(ICategoryFacade categoryFacade) : ApiControllerBase
 {
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<CategoryDto> Get(int id)
     {
         var userId = GetUserId();
@@ -19,6 +21,8 @@ public class CategoryController(ICategoryFacade categoryFacade) : ApiControllerB
     }
 
     [HttpPost("AddOrUpdate")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public ActionResult<CategoryDto> Post(CategoryDto categoryDto)
     {
         var userId = GetUserId();
@@ -27,6 +31,8 @@ public class CategoryController(ICategoryFacade categoryFacade) : ApiControllerB
     }
 
     [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<bool> Delete(int categoryId)
     {
         var userId = GetUserId();
@@ -36,6 +42,8 @@ public class CategoryController(ICategoryFacade categoryFacade) : ApiControllerB
 
 
     [HttpGet("GetAll")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<List<CategoryDto>> GetAll()
     {
         var userId = GetUserId();
