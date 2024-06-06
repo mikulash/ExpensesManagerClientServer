@@ -18,7 +18,6 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "ExpensesManager API", Version = "v1" });
 
-    // Configure Swagger to use Bearer tokens
     var securityScheme = new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -104,7 +103,6 @@ var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
