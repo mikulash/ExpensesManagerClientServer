@@ -11,7 +11,6 @@ namespace ExpensesManager.Server.Facades;
 
 public interface IUserFacade
 {
-    void InitNewUser(string userId);
     FacadeResponse<decimal> GetCurrentBalance(string userId);
     FacadeResponse<decimal> GetTotalIncome(string userId);
     FacadeResponse<decimal> GetTotalExpense(string userId);
@@ -30,15 +29,11 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
     : IUserFacade
 {
     private readonly string invalidUserIdMessage = "User ID cannot be 0.";
-    public void InitNewUser(string userId)
-    {
-        userService.InitNewUser(userId);
-    }
 
     public FacadeResponse<decimal> GetCurrentBalance(string userId)
     {
         var retval = new FacadeResponse<decimal>();
-        if (userId.IsNullOrEmpty()) return retval.SetBadRequest(invalidUserIdMessage);
+        if (userId.IsNullOrEmpty()) return retval.SetUnauthorized(invalidUserIdMessage);
         var balance = userService.GetCurrentBalance(userId);
         return retval.SetOk(balance);
     }
@@ -47,7 +42,7 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
     {
         var retval = new FacadeResponse<decimal>();
 
-        if (userId.IsNullOrEmpty()) return retval.SetBadRequest(invalidUserIdMessage);
+        if (userId.IsNullOrEmpty()) return retval.SetUnauthorized(invalidUserIdMessage);
         var totalIncome = userService.GetTotalIncome(userId);
         return retval.SetOk(totalIncome);
     }
@@ -56,7 +51,7 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
     {
         var retval = new FacadeResponse<decimal>();
 
-        if (userId.IsNullOrEmpty()) return retval.SetBadRequest(invalidUserIdMessage);
+        if (userId.IsNullOrEmpty()) return retval.SetUnauthorized(invalidUserIdMessage);
         var totalExpense = userService.GetTotalExpense(userId);
         return retval.SetOk(totalExpense);
     }
@@ -65,7 +60,7 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
         DateTime? dateFrom, DateTime? dateTo)
     {
         var retval = new FacadeResponse<UserTransactionsDto>();
-        if (userId.IsNullOrEmpty()) return retval.SetBadRequest(invalidUserIdMessage);
+        if (userId.IsNullOrEmpty()) return retval.SetUnauthorized(invalidUserIdMessage);
 
         var incomes = incomeService.GetIncomesByFilters(userId, categoryIds ?? [], dateFrom, dateTo);
         var incomesDto = incomes.Select(IncomeMapping.ToIncomeDto).ToList();
@@ -91,6 +86,7 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
     public FacadeResponse<UserTransactionsDto> GetAllTransactions(string userId)
     {
         var retval = new FacadeResponse<UserTransactionsDto>();
+        if (userId.IsNullOrEmpty()) return retval.SetUnauthorized(invalidUserIdMessage);
 
         var incomes = incomeService.GetAllIncomesByUser(userId);
         var incomesDto = incomes.Select(IncomeMapping.ToIncomeDto).ToList();
@@ -116,6 +112,7 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
     public FacadeResponse<bool> ImportData(UserTransactionsDto transactions, string userId)
     {
         var retval = new FacadeResponse<bool>();
+        if (userId.IsNullOrEmpty()) return retval.SetUnauthorized(invalidUserIdMessage);
 
         var incomes = transactions.Incomes.Select(i => IncomeMapping.ToIncome(i, userId)).ToList();
         var expenses = transactions.Expenses.Select(e => ExpenseMapping.ToExpense(e, userId)).ToList();
@@ -129,6 +126,7 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
     public FacadeResponse<UserStatisticsDto> GetStatistics(string userId)
     {
         var retval = new FacadeResponse<UserStatisticsDto>();
+        if (userId.IsNullOrEmpty()) return retval.SetUnauthorized(invalidUserIdMessage);
         var userStatistics = userService.GetStatistics(userId);
         return retval.SetOk(userStatistics);
     }
@@ -136,6 +134,7 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
     public FacadeResponse<bool> DeleteAllTransactions(string userId)
     {
         var retval = new FacadeResponse<bool>();
+        if (userId.IsNullOrEmpty()) return retval.SetUnauthorized(invalidUserIdMessage);
         var incomeResult = incomeService.DeleteAllIncomes(userId);
         var expenseResult = expenseService.DeleteAllExpenses(userId);
         return retval.SetOk(incomeResult && expenseResult);
@@ -145,6 +144,7 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
     {
 
         var retval = new FacadeResponse<MemoryStream>();
+        if (userId.IsNullOrEmpty()) return retval.SetUnauthorized(invalidUserIdMessage);
         var userStatistics = userService.GetStatistics(userId);
 
         var plt = new Plot();
