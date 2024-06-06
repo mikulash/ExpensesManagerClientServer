@@ -14,6 +14,18 @@ public class IncomeTests : AuthenticatedBaseTest
     }
 
     [Fact]
+    public async Task UserGetsIncomeById()
+    {
+        var incomesResponse = await Client.GetFromJsonAsync<List<IncomeDto>>("/api/Income/GetAll");
+        Assert.NotNull(incomesResponse);
+        Assert.NotEmpty(incomesResponse);
+
+        var incomeId = incomesResponse[0].Id;
+        var response = await Client.GetAsync($"/api/Income?id={incomeId}");
+        Assert.True(response.IsSuccessStatusCode);
+    }
+
+    [Fact]
     public async Task UserSetsIncome()
     {
         var categoriesResponse = await Client.GetFromJsonAsync<List<CategoryDto>>("/api/Category/GetAll");
@@ -42,6 +54,21 @@ public class IncomeTests : AuthenticatedBaseTest
         Assert.True(response.IsSuccessStatusCode);
 
         response = await Client.GetAsync("/api/Income/GetAll");
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UserDeletesIncome()
+    {
+        var incomesResponse = await Client.GetFromJsonAsync<List<IncomeDto>>("/api/Income/GetAll");
+        Assert.NotNull(incomesResponse);
+        Assert.NotEmpty(incomesResponse);
+
+        var incomeId = incomesResponse[0].Id;
+        var response = await Client.DeleteAsync($"/api/Income?incomeId={incomeId}");
+        Assert.True(response.IsSuccessStatusCode);
+
+        response = await Client.GetAsync($"/api/Income?incomeId={incomeId}");
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 }
