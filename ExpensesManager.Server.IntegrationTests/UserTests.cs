@@ -174,4 +174,11 @@ public class UserTests : AuthenticatedBaseTest
         Assert.NotEmpty(categoriesResponse);
         Assert.Contains(categoriesResponse, c => userImportData.Categories.Exists(ui => ui.Name == c.Name));
     }
+
+    [Fact]
+    public async Task BackupUserData()
+    {
+        var response = await Client.PostAsync("api/User/Backup", null);
+        Assert.True(response.IsSuccessStatusCode);
+    }
 }

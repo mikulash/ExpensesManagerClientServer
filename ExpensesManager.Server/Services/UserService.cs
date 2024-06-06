@@ -1,4 +1,6 @@
 ﻿using ExpensesManager.Server.DTOs;
+using ExpensesManager.Server.Mappings;
+using ExpensesManager.Server.Repositories;
 using Microsoft.AspNetCore.Identity;
 using ScottPlot;
 using ScottPlot.Palettes;
@@ -15,7 +17,7 @@ public interface IUserService
     MemoryStream? GetStatsGraph(string userId);
     void InitNewUser(string userId);
     UserDto? GetUser(string userId);
-    bool BackupUserData(UserImportDataDto data, string userId);
+    bool BackupUserData(string userId);
     bool RestoreUserData(string userId);
 }
 
@@ -23,6 +25,7 @@ public class UserService(
     IIncomeService incomeService,
     IExpenseService expenseService,
     ICategoryService categoryService,
+    ICloudRepository cloudRepository,
     UserManager<IdentityUser> userManager)
     : IUserService
 {
@@ -39,14 +42,24 @@ public class UserService(
         };
     }
 
-    public bool BackupUserData(UserImportDataDto data, string userId)
+    public bool BackupUserData(string userId)
     {
-        throw new NotImplementedException();
+        var data = new UserImportDataDto
+        {
+            Incomes = incomeService.GetAllIncomesByUser(userId).Select(IncomeMapping.ToIncomeDto).ToList(),
+            Expenses = expenseService.GetAllExpensesByUser(userId).Select(ExpenseMapping.ToExpenseDto).ToList()
+        };
+        var isSuccess = cloudRepository.BackupUserData(data, userId).Result;
+        return isSuccess;
     }
 
     public bool RestoreUserData(string userId)
     {
-        throw new NotImplementedException();
+        var data = cloudRepository.RestoreUserData(userId).Result;
+        if (data == null) return false;
+        // update everything
+        // TODO
+        return false;
     }
 
     public decimal GetCurrentBalance(string userId)

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Supabase;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,6 +82,16 @@ builder.Services.AddScoped<ICategoryFacade, CategoryFacade>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserFacade, UserFacade>();
 
+// add cloud services
+builder.Services.AddScoped<ICloudRepository, SupabaseRepository>();
+builder.Services.AddScoped<Client>(_ => new Client(
+    builder.Configuration["Supabase:Url"] ?? string.Empty,
+    builder.Configuration["Supabase:Key"],
+    new SupabaseOptions
+    {
+        AutoRefreshToken = true
+    }));
+
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -138,4 +149,6 @@ app.MapFallbackToFile("/index.html");
 await app.RunAsync();
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public partial class Program { };
+public partial class Program
+{
+};

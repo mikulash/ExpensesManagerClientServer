@@ -22,7 +22,7 @@ public interface IUserFacade
     FacadeResponse<UserStatisticsDto> GetStatistics(string userId);
     FacadeResponse<bool> DeleteAllTransactions(string userId);
     FacadeResponse<FileStreamResult> GetStatsGraph(string userId);
-    FacadeResponse<bool> BackupUserData(UserImportDataDto data, string userId);
+    FacadeResponse<bool> BackupUserData(string userId);
     FacadeResponse<bool> RestoreUserData(string userId);
 }
 
@@ -185,9 +185,12 @@ public class UserFacade(
         return retval.SetOk(file);
     }
 
-    public FacadeResponse<bool> BackupUserData(UserImportDataDto data, string userId)
+    public FacadeResponse<bool> BackupUserData(string userId)
     {
-        throw new NotImplementedException();
+        var retval = new FacadeResponse<bool>();
+        if (userId.IsNullOrEmpty()) return retval.SetUnauthorized(invalidUserIdMessage);
+        var isSuccess = userService.BackupUserData(userId);
+        return isSuccess ? retval.SetOk(true) : retval.SetServerError("Error backing up data");
     }
 
     public FacadeResponse<bool> RestoreUserData(string userId)

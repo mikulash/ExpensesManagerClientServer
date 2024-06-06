@@ -105,10 +105,10 @@ public class UserController(IUserFacade userFacade) : ApiControllerBase
 
     [HttpPost("Backup")]
     [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-    public ActionResult<bool> BackupUserData(UserImportDataDto data)
+    public ActionResult<bool> BackupUserData()
     {
         var userId = GetUserId();
-        var retval = userFacade.BackupUserData(data, userId);
+        var retval = userFacade.BackupUserData(userId);
         return FacadeResponseToActionResult(retval);
     }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ExpensesManager.Server.Models;
+using ExpensesManager.Server.Repositories;
 using ExpensesManager.Server.Services;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
@@ -18,6 +19,7 @@ public class UserServiceTests
     private readonly Mock<IIncomeService> _incomeServiceMock;
     private readonly Mock<IExpenseService> _expenseServiceMock;
     private readonly Mock<ICategoryService> _categoryServiceMock;
+    private readonly Mock<ICloudRepository> _cloudRepositoryMock;
     private readonly UserService _userService;
     private const string userId = "testUserId";
 
@@ -26,6 +28,8 @@ public class UserServiceTests
         _incomeServiceMock = new Mock<IIncomeService>();
         _expenseServiceMock = new Mock<IExpenseService>();
         _categoryServiceMock = new Mock<ICategoryService>();
+        _cloudRepositoryMock = new Mock<ICloudRepository>();
+
 
         // necessary dependencies for user manager
         var store = new Mock<IUserStore<IdentityUser>>();
@@ -44,7 +48,7 @@ public class UserServiceTests
             keyNormalizer.Object, errors.Object, services.Object, logger.Object);
 
         _userService = new UserService(_incomeServiceMock.Object, _expenseServiceMock.Object,
-            _categoryServiceMock.Object, userManagerMock.Object);
+            _categoryServiceMock.Object, _cloudRepositoryMock.Object, userManagerMock.Object);
     }
 
     [Fact]
