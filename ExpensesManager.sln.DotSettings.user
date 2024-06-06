@@ -17,7 +17,10 @@
 	
 	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ba97c80e_002Dcc87_002D4495_002D9e95_002Deceb478eb9bd/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="UserSetsTransactionsToCustomCategories #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Project Location="C:\Users\heinz\source\repos\ExpensesManager\ExpensesManager.Server.IntegrationTests" Presentation="&amp;lt;ExpensesManager.Server.IntegrationTests&amp;gt;" /&gt;&#xD;
+  &lt;Or&gt;&#xD;
+    &lt;Project Location="C:\Users\heinz\source\repos\ExpensesManager\ExpensesManager.Server.IntegrationTests" Presentation="&amp;lt;ExpensesManager.Server.IntegrationTests&amp;gt;" /&gt;&#xD;
+    &lt;Project Location="C:\Users\heinz\source\repos\ExpensesManager\ExpensesManager.Server.Tests" Presentation="&amp;lt;ExpensesManager.Server.Tests&amp;gt;" /&gt;&#xD;
+  &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	
 	

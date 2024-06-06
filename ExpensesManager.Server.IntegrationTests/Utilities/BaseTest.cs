@@ -1,6 +1,6 @@
 ﻿using Xunit.Abstractions;
 
-namespace ExpensesManager.Server.IntegrationTests;
+namespace ExpensesManager.Server.IntegrationTests.Utilities;
 
 public class BaseTest : IClassFixture<CustomWebApplicationFactory<Program>>
 {

@@ -1,12 +1,11 @@
 ﻿using System.Data.Common;
 using ExpensesManager.Server.Data;
-using ExpensesManager.Server.IntegrationTests.Utilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-namespace ExpensesManager.Server.IntegrationTests;
+namespace ExpensesManager.Server.IntegrationTests.Utilities;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class

@@ -1,16 +1,15 @@
 ﻿using System.Net.Http.Headers;
 using ExpensesManager.Server.DTOs;
 using ExpensesManager.Server.DTOs.Auth;
-using ExpensesManager.Server.IntegrationTests.Utilities;
 using ExpensesManager.Server.Mappings;
 using Microsoft.AspNetCore.Identity;
 using Xunit.Abstractions;
 
-namespace ExpensesManager.Server.IntegrationTests;
+namespace ExpensesManager.Server.IntegrationTests.Utilities;
 
 public class AuthenticatedBaseTest : BaseTest
 {
-    protected UserDto User;
+    protected readonly UserDto User;
 
     protected AuthenticatedBaseTest(CustomWebApplicationFactory<Program> factory, ITestOutputHelper testOutputHelper) :
         base(factory, testOutputHelper)
