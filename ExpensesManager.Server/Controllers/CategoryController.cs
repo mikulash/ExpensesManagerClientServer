@@ -20,6 +20,16 @@ public class CategoryController(ICategoryFacade categoryFacade) : ApiControllerB
         return FacadeResponseToActionResult(retval);
     }
 
+    [HttpGet("GetAll")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<List<CategoryDto>> GetAll()
+    {
+        var userId = GetUserId();
+        var retval = categoryFacade.GetAllCategoriesByUser(userId);
+        return FacadeResponseToActionResult(retval);
+    }
+
     [HttpPost("AddOrUpdate")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -40,14 +50,13 @@ public class CategoryController(ICategoryFacade categoryFacade) : ApiControllerB
         return FacadeResponseToActionResult(retval);
     }
 
-
-    [HttpGet("GetAll")]
+    [HttpDelete("DeleteAll")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<List<CategoryDto>> GetAll()
+    public ActionResult<bool> DeleteAll()
     {
         var userId = GetUserId();
-        var retval = categoryFacade.GetAllCategoriesByUser(userId);
+        var retval = categoryFacade.DeleteAllCategories(userId);
         return FacadeResponseToActionResult(retval);
     }
 }
