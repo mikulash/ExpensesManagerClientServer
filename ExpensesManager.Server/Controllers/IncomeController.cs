@@ -11,6 +11,7 @@ namespace ExpensesManager.Server.Controllers;
 public class IncomeController(IIncomeFacade incomeFacade) : ApiControllerBase
 {
     [HttpGet]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     public ActionResult<IncomeDto> Get(int id)
     {
         var userId = GetUserId();
@@ -19,6 +20,7 @@ public class IncomeController(IIncomeFacade incomeFacade) : ApiControllerBase
     }
 
     [HttpGet("GetAll")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     public ActionResult<List<IncomeDto>> GetAll()
     {
         var userId = GetUserId();
@@ -27,6 +29,7 @@ public class IncomeController(IIncomeFacade incomeFacade) : ApiControllerBase
     }
 
     [HttpPost("AddOrUpdate")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
     public ActionResult<IncomeDto> Post(IncomeDto incomeDto)
     {
         var userId = GetUserId();
@@ -35,6 +38,7 @@ public class IncomeController(IIncomeFacade incomeFacade) : ApiControllerBase
     }
 
     [HttpDelete]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
     public ActionResult<bool> Delete(int incomeId)
     {
         var userId = GetUserId();
@@ -43,6 +47,7 @@ public class IncomeController(IIncomeFacade incomeFacade) : ApiControllerBase
     }
 
     [HttpDelete("DeleteAll")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
     public ActionResult<bool> DeleteAll()
     {
         var userId = GetUserId();
