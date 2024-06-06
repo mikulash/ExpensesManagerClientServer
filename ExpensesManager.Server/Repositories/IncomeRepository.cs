@@ -45,10 +45,13 @@ public class IncomeRepository(ApplicationDbContext context) : IIncomeRepository
 
     public bool SetIncomes(List<Income> incomes)
     {
-        foreach (var income in incomes) SetIncome(income);
+        foreach (var income in incomes)
+        {
+            var isStoredSuccessfully = SetIncome(income);
+            if (!isStoredSuccessfully) return false;
+        }
 
-        var changesSaved = context.SaveChanges() > 0;
-        return changesSaved;
+        return true;
     }
 
     public bool DeleteIncome(int incomeId, string userId)

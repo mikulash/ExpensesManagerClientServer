@@ -195,6 +195,9 @@ public class UserFacade(
 
     public FacadeResponse<bool> RestoreUserData(string userId)
     {
-        throw new NotImplementedException();
+        var retval = new FacadeResponse<bool>();
+        if (userId.IsNullOrEmpty()) return retval.SetUnauthorized(invalidUserIdMessage);
+        var isSuccess = userService.RestoreUserData(userId);
+        return isSuccess ? retval.SetOk(true) : retval.SetServerError("Error restoring data");
     }
 }

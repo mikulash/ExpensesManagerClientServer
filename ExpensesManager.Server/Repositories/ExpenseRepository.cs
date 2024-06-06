@@ -48,10 +48,13 @@ public class ExpenseRepository(ApplicationDbContext context) : IExpenseRepositor
 
     public bool SetExpenses(List<Expense> expenses)
     {
-        foreach (var expense in expenses) SetExpense(expense);
+        foreach (var expense in expenses)
+        {
+            var isStoredSuccessfully = SetExpense(expense);
+            if (!isStoredSuccessfully) return false;
+        }
 
-        var changesSaved = context.SaveChanges() > 0;
-        return changesSaved;
+        return true;
     }
 
     public bool DeleteExpense(int expenseId, string userId)

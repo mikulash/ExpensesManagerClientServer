@@ -1,7 +1,8 @@
 ﻿using ExpensesManager.Server.DTOs;
 using ExpensesManager.Server.Models;
 using Newtonsoft.Json;
-using Supabase;
+using Postgrest;
+using Client = Supabase.Client;
 
 namespace ExpensesManager.Server.Repositories;
 
@@ -21,8 +22,13 @@ public class SupabaseRepository(Client client) : ICloudRepository
         return newBackup != null;
     }
 
-    public Task<UserImportDataDto> RestoreUserData(string userId)
+    public async Task<UserImportDataDto?> RestoreUserData(string userId)
     {
-        throw new NotImplementedException();
+        var result = await client.From<UserCloudBackup>().Select("*").Where(x => x.UserId == userId)
+            .Order(x => x.CreatedAt, Constants.Ordering.Descending)
+            .Limit(1).Get();
+        var backupData = result.Models.FirstOrDefault();
+        if (backupData == null) return null;
+        return JsonConvert.DeserializeObject<UserImportDataDto>(backupData.UserData);
     }
 }

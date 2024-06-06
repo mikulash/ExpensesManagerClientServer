@@ -13,18 +13,3 @@ public class UserCloudBackup : BaseModel
     [Column("created_at")] public DateTime CreatedAt { get; set; }
 }
 
-public class CreateBackupRequest
-{
-    public string UserId { get; set; }
-    public string UserData { get; set; }
-    public string UserDataType { get; set; }
-}
-
-public class RestoreBackupRequest
-{
-    public long Id { get; set; }
-    public string UserId { get; set; }
-    public string UserDataType { get; set; }
-    public string UserData { get; set; }
-    public DateTime CreatedAt { get; set; }
-}

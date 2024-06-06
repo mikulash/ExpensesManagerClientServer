@@ -181,4 +181,25 @@ public class UserTests : AuthenticatedBaseTest
         var response = await Client.PostAsync("api/User/Backup", null);
         Assert.True(response.IsSuccessStatusCode);
     }
+
+    [Fact]
+    public async Task RestoreUserData()
+    {
+        var response = await Client.PostAsync("api/User/Backup", null);
+        Assert.True(response.IsSuccessStatusCode);
+
+        // delete all data
+        response = await Client.DeleteAsync("api/User/DeleteAll");
+        Assert.True(response.IsSuccessStatusCode);
+
+        response = await Client.PostAsync("api/User/Restore", null);
+        Assert.True(response.IsSuccessStatusCode);
+    }
+
+    [Fact]
+    public async Task RestoreUserDataWithoutBackup()
+    {
+        var response = await Client.PostAsync("api/User/Restore", null);
+        Assert.False(response.IsSuccessStatusCode);
+    }
 }

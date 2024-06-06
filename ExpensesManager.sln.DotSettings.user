@@ -4,12 +4,21 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/CreateUnitTestDialog/TestProjectMapping/=B2D13F29_002DF414_002D41B4_002D855A_002DBC22BA58E469/@EntryIndexedValue">0B6FB129-C561-40D3-854D-A5C1453C6DF4</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/CreateUnitTestDialog/TestProjectMapping/=B2D13F29_002DF414_002D41B4_002D855A_002DBC22BA58E469/@EntryIndexedValue">0B6FB129-C561-40D3-854D-A5C1453C6DF4</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/CreateUnitTestDialog/TestTemplateMapping/=xUnit/@EntryIndexedValue">33ff99d8-b1ad-4ed5-a4fd-376b97c2c841</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=3fc31871_002Df6ae_002D485b_002D8696_002D1013fa238f67/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="BackupUserData #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::F24F9F77-279C-4017-AD08-849EA7A35ACB::net8.0::ExpensesManager.Server.IntegrationTests.UserTests.BackupUserData&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::F24F9F77-279C-4017-AD08-849EA7A35ACB::net8.0::ExpensesManager.Server.IntegrationTests.UserTests.RestoreUserData&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::F24F9F77-279C-4017-AD08-849EA7A35ACB::net8.0::ExpensesManager.Server.IntegrationTests.UserTests.RestoreUserDataWithoutBackup&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=5b8e56a6_002D8426_002D415f_002Daa9f_002D247e2b779de2/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Solution /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6a3b0476_002D49bd_002D4287_002D8d30_002Db7caa1b43d6b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="BackupUserData" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6a3b0476_002D49bd_002D4287_002D8d30_002Db7caa1b43d6b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="BackupUserData" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::F24F9F77-279C-4017-AD08-849EA7A35ACB::net8.0::ExpensesManager.Server.IntegrationTests.UserTests.BackupUserData&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::F24F9F77-279C-4017-AD08-849EA7A35ACB::net8.0::ExpensesManager.Server.IntegrationTests.UserTests.RestoreUserData&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::F24F9F77-279C-4017-AD08-849EA7A35ACB::net8.0::ExpensesManager.Server.IntegrationTests.UserTests.RestoreUserDataWithoutBackup&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	

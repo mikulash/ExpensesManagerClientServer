@@ -55,10 +55,15 @@ public class CategoryRepository(ApplicationDbContext context) : ICategoryReposit
 
     public bool SetCategories(List<Category> categories)
     {
-        foreach (var category in categories) SetCategory(category);
 
-        var changesSaved = context.SaveChanges() > 0;
-        return changesSaved;
+        foreach (var category in categories)
+        {
+            var isSetSuccessfully = SetCategory(category);
+            if (!isSetSuccessfully) return false;
+        }
+
+        return true;
+
     }
 
     public bool DeleteCategory(int categoryId, string userId)

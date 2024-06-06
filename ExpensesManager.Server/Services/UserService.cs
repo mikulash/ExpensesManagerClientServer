@@ -47,7 +47,8 @@ public class UserService(
         var data = new UserImportDataDto
         {
             Incomes = incomeService.GetAllIncomesByUser(userId).Select(IncomeMapping.ToIncomeDto).ToList(),
-            Expenses = expenseService.GetAllExpensesByUser(userId).Select(ExpenseMapping.ToExpenseDto).ToList()
+            Expenses = expenseService.GetAllExpensesByUser(userId).Select(ExpenseMapping.ToExpenseDto).ToList(),
+            Categories = categoryService.GetAllCategoriesByUser(userId).Select(CategoryMapping.ToCategoryDto).ToList()
         };
         var isSuccess = cloudRepository.BackupUserData(data, userId).Result;
         return isSuccess;
@@ -57,9 +58,16 @@ public class UserService(
     {
         var data = cloudRepository.RestoreUserData(userId).Result;
         if (data == null) return false;
-        // update everything
-        // TODO
-        return false;
+
+        var incomes = data.Incomes.Select(income => IncomeMapping.ToIncome(income, userId)).ToList();
+        var expenses = data.Expenses.Select(expense => ExpenseMapping.ToExpense(expense, userId)).ToList();
+        var categories = data.Categories.Select(category => CategoryMapping.ToCategory(category, userId)).ToList();
+
+        var isCategorySet = categoryService.SetCategories(categories);
+        var isIncomeSet = incomeService.SetIncomes(incomes);
+        var isExpenseSet = expenseService.SetExpenses(expenses);
+
+        return isIncomeSet && isExpenseSet && isCategorySet;
     }
 
     public decimal GetCurrentBalance(string userId)
