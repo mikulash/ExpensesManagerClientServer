@@ -58,6 +58,10 @@ var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]);
 builder.Services.AddSingleton<JwtTokenGenerator>();
 
+// add auth services
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAuthFacade, AuthFacade>();
+
 // add expense services
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
@@ -132,7 +136,7 @@ app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
 
-app.Run();
+await app.RunAsync();
 
-
+// ReSharper disable once ClassNeverInstantiated.Global
 public partial class Program { };
