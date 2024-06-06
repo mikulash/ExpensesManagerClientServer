@@ -9,7 +9,7 @@ public interface ICategoryService
     Category? GetCategoryById(int categoryId, string userId);
     bool SetCategory(Category category);
     bool SetCategories(List<Category> categories);
-    bool DeleteCategory(int categoryId);
+    bool DeleteCategory(int categoryId, string userId);
     bool DeleteAllCategories(string userId);
 }
 
@@ -35,9 +35,9 @@ public class CategoryService(ICategoryRepository categoryRepository) : ICategory
         return categoryRepository.SetCategories(categories);
     }
 
-    public bool DeleteCategory(int categoryId)
+    public bool DeleteCategory(int categoryId, string userId)
     {
-        return categoryRepository.DeleteCategory(categoryId);
+        return categoryRepository.DeleteCategory(categoryId, userId);
     }
 
     public bool DeleteAllCategories(string userId)

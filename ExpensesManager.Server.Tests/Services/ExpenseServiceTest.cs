@@ -48,10 +48,10 @@ public class ExpenseServiceTests
         const int expenseId = 1;
         var expectedExpense = new Expense { Id = expenseId, UserId = userId, Amount = 100 };
 
-        _expenseRepositoryMock.Setup(repo => repo.GetExpenseById(expenseId)).Returns(expectedExpense);
+        _expenseRepositoryMock.Setup(repo => repo.GetExpenseById(expenseId, userId)).Returns(expectedExpense);
 
         // Act
-        var result = _expenseService.GetExpenseById(expenseId);
+        var result = _expenseService.GetExpenseById(expenseId, userId);
 
         // Assert
         Assert.Equal(expectedExpense, result);
@@ -97,10 +97,10 @@ public class ExpenseServiceTests
         // Arrange
         const int expenseId = 1;
 
-        _expenseRepositoryMock.Setup(repo => repo.DeleteExpense(expenseId)).Returns(true);
+        _expenseRepositoryMock.Setup(repo => repo.DeleteExpense(expenseId, userId)).Returns(true);
 
         // Act
-        var result = _expenseService.DeleteExpense(expenseId);
+        var result = _expenseService.DeleteExpense(expenseId, userId);
 
         // Assert
         Assert.True(result);

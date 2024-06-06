@@ -6,10 +6,10 @@ namespace ExpensesManager.Server.Services;
 public interface IExpenseService
 {
     List<Expense> GetAllExpensesByUser(string userId);
-    Expense? GetExpenseById(int expenseId);
+    Expense? GetExpenseById(int expenseId, string userId);
     bool SetExpense(Expense expense);
     bool SetExpenses(List<Expense> expenses);
-    bool DeleteExpense(int expenseId);
+    bool DeleteExpense(int expenseId, string userId);
     bool DeleteAllExpenses(string userId);
     List<Expense> GetExpensesByCategory(string userId, int categoryId);
     List<Expense> GetExpensesByDateRange(string userId, DateTime startDate, DateTime endDate);
@@ -24,9 +24,9 @@ public class ExpenseService(IExpenseRepository expenseRepository) : IExpenseServ
         return expenseRepository.GetAllExpensesByUser(userId);
     }
 
-    public Expense? GetExpenseById(int expenseId)
+    public Expense? GetExpenseById(int expenseId, string userId)
     {
-        return expenseRepository.GetExpenseById(expenseId);
+        return expenseRepository.GetExpenseById(expenseId, userId);
     }
 
     public bool SetExpense(Expense expense)
@@ -39,9 +39,9 @@ public class ExpenseService(IExpenseRepository expenseRepository) : IExpenseServ
         return expenseRepository.SetExpenses(expenses);
     }
 
-    public bool DeleteExpense(int expenseId)
+    public bool DeleteExpense(int expenseId, string userId)
     {
-        return expenseRepository.DeleteExpense(expenseId);
+        return expenseRepository.DeleteExpense(expenseId, userId);
     }
 
     public bool DeleteAllExpenses(string userId)

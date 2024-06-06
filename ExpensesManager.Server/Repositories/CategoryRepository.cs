@@ -9,7 +9,7 @@ public interface ICategoryRepository
     Category? GetCategoryById(int categoryId, string userId);
     bool SetCategory(Category category);
     bool SetCategories(List<Category> categories);
-    bool DeleteCategory(int categoryId);
+    bool DeleteCategory(int categoryId, string userId);
     bool DeleteAllCategories(string userId);
 }
 
@@ -61,9 +61,9 @@ public class CategoryRepository(ApplicationDbContext context) : ICategoryReposit
         return changesSaved;
     }
 
-    public bool DeleteCategory(int categoryId)
+    public bool DeleteCategory(int categoryId, string userId)
     {
-        var category = context.Categories.FirstOrDefault(c => c.Id == categoryId);
+        var category = context.Categories.FirstOrDefault(c => c.Id == categoryId && c.UserId == userId);
         if (category == null) return false;
 
         context.Categories.Remove(category);

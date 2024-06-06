@@ -82,10 +82,7 @@ public class UserController(IUserFacade userFacade, UserManager<IdentityUser> us
     {
         var userId = GetUserId();
         if (string.IsNullOrEmpty(userId)) return Unauthorized(new { Success = false, Message = "Unauthorized" });
-
-        if (userId != userTransactionsDto.UserId) return BadRequest(new { Success = false, Message = "Unauthorized" });
-
-        var retval = userFacade.ImportData(userTransactionsDto);
+        var retval = userFacade.ImportData(userTransactionsDto, userId);
         return FacadeResponseToActionResult(retval);
     }
 

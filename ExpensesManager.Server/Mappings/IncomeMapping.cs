@@ -13,12 +13,11 @@ public static class IncomeMapping
             Amount = income.Amount,
             Description = income.Description,
             Date = income.Date,
-            UserId = income.UserId,
             CategoryId = income.CategoryId
         };
     }
 
-    public static Income ToIncome(IncomeDto incomeDto)
+    public static Income ToIncome(IncomeDto incomeDto, string userId)
     {
         return new Income
         {
@@ -26,7 +25,7 @@ public static class IncomeMapping
             Amount = incomeDto.Amount,
             Description = incomeDto.Description,
             Date = incomeDto.Date,
-            UserId = incomeDto.UserId,
+            UserId = userId,
             CategoryId = incomeDto.CategoryId
         };
     }

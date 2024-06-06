@@ -6,10 +6,10 @@ namespace ExpensesManager.Server.Repositories;
 public interface IIncomeRepository
 {
     List<Income> GetAllIncomesByUser(string userId);
-    Income? GetIncomeById(int incomeId);
+    Income? GetIncomeById(int incomeId, string userId);
     bool SetIncome(Income income);
     bool SetIncomes(List<Income> incomes);
-    bool DeleteIncome(int incomeId);
+    bool DeleteIncome(int incomeId, string userId);
     bool DeleteAllIncomes(string userId);
     List<Income> GetIncomesByFilters(string userId, List<int> categoryIds, DateTime? startDate, DateTime? endDate);
 }
@@ -21,9 +21,9 @@ public class IncomeRepository(ApplicationDbContext context) : IIncomeRepository
         return context.Incomes.Where(i => i.UserId == userId).ToList();
     }
 
-    public Income? GetIncomeById(int incomeId)
+    public Income? GetIncomeById(int incomeId, string userId)
     {
-        return context.Incomes.FirstOrDefault(i => i.Id == incomeId);
+        return context.Incomes.FirstOrDefault(i => i.Id == incomeId && i.UserId == userId);
     }
 
     /**
@@ -51,9 +51,9 @@ public class IncomeRepository(ApplicationDbContext context) : IIncomeRepository
         return changesSaved;
     }
 
-    public bool DeleteIncome(int incomeId)
+    public bool DeleteIncome(int incomeId, string userId)
     {
-        var income = context.Incomes.FirstOrDefault(i => i.Id == incomeId);
+        var income = context.Incomes.FirstOrDefault(i => i.Id == incomeId && i.UserId == userId);
         if (income == null) return false;
 
         context.Incomes.Remove(income);

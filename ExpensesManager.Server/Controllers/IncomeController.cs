@@ -13,7 +13,8 @@ public class IncomeController(IIncomeFacade incomeFacade) : ApiControllerBase
     [HttpGet]
     public ActionResult<IncomeDto> Get(int id)
     {
-        var retval = incomeFacade.GetIncomeById(id);
+        var userId = GetUserId();
+        var retval = incomeFacade.GetIncomeById(id, userId);
         return FacadeResponseToActionResult(retval);
     }
 
@@ -29,15 +30,15 @@ public class IncomeController(IIncomeFacade incomeFacade) : ApiControllerBase
     public ActionResult<IncomeDto> Post(IncomeDto incomeDto)
     {
         var userId = GetUserId();
-        if (userId != incomeDto.UserId) return Unauthorized(new { Success = false, Message = "Unauthorized" });
-        var retval = incomeFacade.SetIncome(incomeDto);
+        var retval = incomeFacade.SetIncome(incomeDto, userId);
         return FacadeResponseToActionResult(retval);
     }
 
     [HttpDelete]
     public ActionResult<bool> Delete(int incomeId)
     {
-        var retval = incomeFacade.DeleteIncome(incomeId);
+        var userId = GetUserId();
+        var retval = incomeFacade.DeleteIncome(incomeId, userId);
         return FacadeResponseToActionResult(retval);
     }
 

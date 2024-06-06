@@ -105,11 +105,11 @@ public class CategoryServiceTests
         const int categoryId = 1;
 
         _categoryRepositoryMock
-            .Setup(repo => repo.DeleteCategory(categoryId))
+            .Setup(repo => repo.DeleteCategory(categoryId, userId))
             .Returns(true);
 
         // Act
-        var result = _categoryService.DeleteCategory(categoryId);
+        var result = _categoryService.DeleteCategory(categoryId, userId);
 
         // Assert
         Assert.True(result);

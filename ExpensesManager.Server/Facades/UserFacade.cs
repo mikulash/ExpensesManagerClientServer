@@ -20,7 +20,7 @@ public interface IUserFacade
         DateTime? dateFrom, DateTime? dateTo);
 
     FacadeResponse<UserTransactionsDto> GetAllTransactions(string userId);
-    FacadeResponse<bool> ImportData(UserTransactionsDto transactions);
+    FacadeResponse<bool> ImportData(UserTransactionsDto transactions, string userId);
     FacadeResponse<UserStatisticsDto> GetStatistics(string userId);
     FacadeResponse<bool> DeleteAllTransactions(string userId);
     FacadeResponse<MemoryStream> GetStatsGraph(string userId);
@@ -29,6 +29,7 @@ public interface IUserFacade
 public class UserFacade(IUserService userService, IIncomeService incomeService, IExpenseService expenseService)
     : IUserFacade
 {
+    private readonly string invalidUserIdMessage = "User ID cannot be 0.";
     public void InitNewUser(string userId)
     {
         userService.InitNewUser(userId);
@@ -37,7 +38,7 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
     public FacadeResponse<decimal> GetCurrentBalance(string userId)
     {
         var retval = new FacadeResponse<decimal>();
-        if (userId.IsNullOrEmpty()) return retval.SetBadRequest("User ID cannot be 0.");
+        if (userId.IsNullOrEmpty()) return retval.SetBadRequest(invalidUserIdMessage);
         var balance = userService.GetCurrentBalance(userId);
         return retval.SetOk(balance);
     }
@@ -46,7 +47,7 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
     {
         var retval = new FacadeResponse<decimal>();
 
-        if (userId.IsNullOrEmpty()) return retval.SetBadRequest("User ID cannot be 0.");
+        if (userId.IsNullOrEmpty()) return retval.SetBadRequest(invalidUserIdMessage);
         var totalIncome = userService.GetTotalIncome(userId);
         return retval.SetOk(totalIncome);
     }
@@ -55,7 +56,7 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
     {
         var retval = new FacadeResponse<decimal>();
 
-        if (userId.IsNullOrEmpty()) return retval.SetBadRequest("User ID cannot be 0.");
+        if (userId.IsNullOrEmpty()) return retval.SetBadRequest(invalidUserIdMessage);
         var totalExpense = userService.GetTotalExpense(userId);
         return retval.SetOk(totalExpense);
     }
@@ -64,7 +65,7 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
         DateTime? dateFrom, DateTime? dateTo)
     {
         var retval = new FacadeResponse<UserTransactionsDto>();
-        if (userId.IsNullOrEmpty()) return retval.SetBadRequest("User ID cannot be 0.");
+        if (userId.IsNullOrEmpty()) return retval.SetBadRequest(invalidUserIdMessage);
 
         var incomes = incomeService.GetIncomesByFilters(userId, categoryIds ?? [], dateFrom, dateTo);
         var incomesDto = incomes.Select(IncomeMapping.ToIncomeDto).ToList();
@@ -77,7 +78,6 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
 
         var userTransactions = new UserTransactionsDto
         {
-            UserId = userId,
             Incomes = incomesDto,
             Expenses = expensesDto,
             TotalIncome = totalIncome,
@@ -103,7 +103,6 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
 
         var userTransactions = new UserTransactionsDto
         {
-            UserId = userId,
             Incomes = incomesDto,
             Expenses = expensesDto,
             TotalIncome = totalIncome,
@@ -114,12 +113,12 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
         return retval.SetOk(userTransactions);
     }
 
-    public FacadeResponse<bool> ImportData(UserTransactionsDto transactions)
+    public FacadeResponse<bool> ImportData(UserTransactionsDto transactions, string userId)
     {
         var retval = new FacadeResponse<bool>();
 
-        var incomes = transactions.Incomes.Select(IncomeMapping.ToIncome).ToList();
-        var expenses = transactions.Expenses.Select(ExpenseMapping.ToExpense).ToList();
+        var incomes = transactions.Incomes.Select(i => IncomeMapping.ToIncome(i, userId)).ToList();
+        var expenses = transactions.Expenses.Select(e => ExpenseMapping.ToExpense(e, userId)).ToList();
 
         var incomeResult = incomeService.SetIncomes(incomes);
         var expenseResult = expenseService.SetExpenses(expenses);

@@ -9,9 +9,9 @@ namespace ExpensesManager.Server.Facades;
 public interface IExpenseFacade
 {
     FacadeResponse<List<ExpenseDto>> GetAllExpensesByUser(string userId);
-    FacadeResponse<ExpenseDto> GetExpenseById(int expense);
-    FacadeResponse<ExpenseDto> SetExpense(ExpenseDto expenseDto);
-    FacadeResponse<bool> DeleteExpense(int expenseId);
+    FacadeResponse<ExpenseDto> GetExpenseById(int expenseId, string userId);
+    FacadeResponse<ExpenseDto> SetExpense(ExpenseDto expenseDto, string userId);
+    FacadeResponse<bool> DeleteExpense(int expenseId, string userId);
     FacadeResponse<bool> DeleteAllExpenses(string userId);
     FacadeResponse<List<ExpenseDto>> GetExpensesByCategory(string userId, int categoryId);
     FacadeResponse<List<ExpenseDto>> GetExpensesByDateRange(string userId, DateTime startDate, DateTime endDate);
@@ -31,10 +31,10 @@ public class ExpenseFacade(IExpenseService expenseService) : IExpenseFacade
         return retval.SetOk(expensesDto);
     }
 
-    public FacadeResponse<ExpenseDto> GetExpenseById(int expenseId)
+    public FacadeResponse<ExpenseDto> GetExpenseById(int expenseId, string userId)
     {
         var retval = new FacadeResponse<ExpenseDto>();
-        var expense = expenseService.GetExpenseById(expenseId);
+        var expense = expenseService.GetExpenseById(expenseId, userId);
         if (expense == null) return retval.SetNotFound("Expense not found.");
 
         var expenseDto = ExpenseMapping.ToExpenseDto(expense);
@@ -42,13 +42,13 @@ public class ExpenseFacade(IExpenseService expenseService) : IExpenseFacade
         return retval.SetOk(expenseDto);
     }
 
-    public FacadeResponse<ExpenseDto> SetExpense(ExpenseDto expenseDto)
+    public FacadeResponse<ExpenseDto> SetExpense(ExpenseDto expenseDto, string userId)
     {
         var retval = new FacadeResponse<ExpenseDto>();
 
-        if (expenseDto.UserId.IsNullOrEmpty()) return retval.SetBadRequest("User ID cannot be 0.");
+        if (userId.IsNullOrEmpty()) return retval.SetUnauthorized("User ID cannot be 0.");
 
-        var expense = ExpenseMapping.ToExpense(expenseDto);
+        var expense = ExpenseMapping.ToExpense(expenseDto, userId);
         var result = expenseService.SetExpense(expense);
         if (!result) return retval.SetError(500, "Failed to set expense.");
         var retvalExpenseDto = ExpenseMapping.ToExpenseDto(expense);
@@ -56,10 +56,10 @@ public class ExpenseFacade(IExpenseService expenseService) : IExpenseFacade
         return retval.SetOk(retvalExpenseDto);
     }
 
-    public FacadeResponse<bool> DeleteExpense(int expenseId)
+    public FacadeResponse<bool> DeleteExpense(int expenseId, string userId)
     {
         var retval = new FacadeResponse<bool>();
-        var result = expenseService.DeleteExpense(expenseId);
+        var result = expenseService.DeleteExpense(expenseId, userId);
         if (!result) return retval.SetNotFound("Failed to delete expense.");
 
         return retval.SetOk(result);

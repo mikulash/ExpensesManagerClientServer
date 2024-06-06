@@ -56,7 +56,7 @@ public class CategoryFacade(ICategoryService categoryService) : ICategoryFacade
     public FacadeResponse<bool> DeleteCategory(int categoryId, string userId)
     {
         var retval = new FacadeResponse<bool>();
-        var isDeletingSuccess = categoryService.DeleteCategory(categoryId);
+        var isDeletingSuccess = categoryService.DeleteCategory(categoryId, userId);
         if (!isDeletingSuccess) return retval.SetNotFound("Category not found.");
         return retval.SetOk(isDeletingSuccess);
     }

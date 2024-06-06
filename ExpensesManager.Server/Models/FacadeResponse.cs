@@ -57,4 +57,11 @@ public class FacadeResponse<T> where T : notnull
         Message = message;
         return this;
     }
+
+    public FacadeResponse<T> SetUnauthorized(string message)
+    {
+        StatusCode = StatusCodes.Status401Unauthorized;
+        Message = message;
+        return this;
+    }
 }

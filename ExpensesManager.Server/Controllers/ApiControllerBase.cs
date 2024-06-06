@@ -9,7 +9,10 @@ public class ApiControllerBase : ControllerBase
     protected ActionResult<T> FacadeResponseToActionResult<T>(FacadeResponse<T> response) where T : notnull
     {
         if (response.IsSuccess) return Ok(response.Value);
+        if (response.StatusCode == StatusCodes.Status401Unauthorized) return BadRequest(response.Message);
+
         if (response.StatusCode == StatusCodes.Status400BadRequest) return BadRequest(response.Message);
+
         if (response.StatusCode == StatusCodes.Status403Forbidden)
         {
             HttpContext.Response.Headers.Append("X-Error-Message", response.Message);

@@ -6,10 +6,10 @@ namespace ExpensesManager.Server.Repositories;
 public interface IExpenseRepository
 {
     List<Expense> GetAllExpensesByUser(string userId);
-    Expense? GetExpenseById(int expenseId);
+    Expense? GetExpenseById(int expenseId, string userId);
     bool SetExpense(Expense expense);
     bool SetExpenses(List<Expense> expenses);
-    bool DeleteExpense(int expenseId);
+    bool DeleteExpense(int expenseId, string userId);
     bool DeleteAllExpenses(string userId);
     List<Expense> GetExpensesByCategory(string userId, int categoryId);
     List<Expense> GetExpensesByDateRange(string userId, DateTime startDate, DateTime endDate);
@@ -24,9 +24,9 @@ public class ExpenseRepository(ApplicationDbContext context) : IExpenseRepositor
         return context.Expenses.Where(e => e.UserId == userId).ToList();
     }
 
-    public Expense? GetExpenseById(int expenseId)
+    public Expense? GetExpenseById(int expenseId, string userId)
     {
-        return context.Expenses.FirstOrDefault(e => e.Id == expenseId);
+        return context.Expenses.FirstOrDefault(e => e.Id == expenseId && e.UserId == userId);
     }
 
     /**
@@ -54,9 +54,9 @@ public class ExpenseRepository(ApplicationDbContext context) : IExpenseRepositor
         return changesSaved;
     }
 
-    public bool DeleteExpense(int expenseId)
+    public bool DeleteExpense(int expenseId, string userId)
     {
-        var expense = context.Expenses.FirstOrDefault(e => e.Id == expenseId);
+        var expense = context.Expenses.FirstOrDefault(e => e.Id == expenseId && e.UserId == userId);
         if (expense == null) return false;
 
         context.Expenses.Remove(expense);
@@ -74,17 +74,18 @@ public class ExpenseRepository(ApplicationDbContext context) : IExpenseRepositor
 
     public List<Expense> GetExpensesByCategory(string userId, int categoryId)
     {
-        return context.Expenses.Where(e => e.CategoryId == categoryId).ToList();
+        return context.Expenses.Where(e => e.CategoryId == categoryId && e.UserId == userId).ToList();
     }
 
     public List<Expense> GetExpensesByDateRange(string userId, DateTime startDate, DateTime endDate)
     {
-        return context.Expenses.Where(e => e.Date >= startDate && e.Date <= endDate).ToList();
+        return context.Expenses.Where(e => e.Date >= startDate && e.Date <= endDate && e.UserId == userId).ToList();
     }
 
     public List<Expense> GetExpensesByAmountRange(string userId, decimal startAmount, decimal endAmount)
     {
-        return context.Expenses.Where(e => e.Amount >= startAmount && e.Amount <= endAmount).ToList();
+        return context.Expenses.Where(e => e.Amount >= startAmount && e.Amount <= endAmount && e.UserId == userId)
+            .ToList();
     }
 
     public List<Expense> GetExpensesByFilters(string userId, List<int> categoryIds, DateTime? startDate,

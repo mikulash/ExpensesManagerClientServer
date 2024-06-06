@@ -11,29 +11,43 @@ namespace ExpensesManager.Server.Controllers;
 public class ExpenseController(IExpenseFacade expenseFacade) : ApiControllerBase
 {
     [HttpGet]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     public ActionResult<ExpenseDto> Get(int id)
     {
-        var retval = expenseFacade.GetExpenseById(id);
+        var userId = GetUserId();
+        var retval = expenseFacade.GetExpenseById(id, userId);
         return FacadeResponseToActionResult(retval);
     }
 
     [HttpPost("AddOrUpdate")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
     public ActionResult<ExpenseDto> Post(ExpenseDto expenseDto)
     {
         var userId = GetUserId();
-        if (userId != expenseDto.UserId) return Unauthorized(new { Success = false, Message = "Unauthorized" });
-        var retval = expenseFacade.SetExpense(expenseDto);
+        var retval = expenseFacade.SetExpense(expenseDto, userId);
         return FacadeResponseToActionResult(retval);
     }
 
     [HttpDelete]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
     public ActionResult<bool> Delete(int expenseId)
     {
-        var retval = expenseFacade.DeleteExpense(expenseId);
+        var userId = GetUserId();
+        var retval = expenseFacade.DeleteExpense(expenseId, userId);
+        return FacadeResponseToActionResult(retval);
+    }
+
+    [HttpDelete("DeleteAll")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
+    public ActionResult<bool> DeleteAll()
+    {
+        var userId = GetUserId();
+        var retval = expenseFacade.DeleteAllExpenses(userId);
         return FacadeResponseToActionResult(retval);
     }
 
     [HttpGet("GetAll")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     public ActionResult<List<ExpenseDto>> GetAll()
     {
         var userId = GetUserId();
@@ -42,6 +56,7 @@ public class ExpenseController(IExpenseFacade expenseFacade) : ApiControllerBase
     }
 
     [HttpGet("GetByCategory")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     public ActionResult<List<ExpenseDto>> GetByCategory(int categoryId)
     {
         var userId = GetUserId();
@@ -50,6 +65,7 @@ public class ExpenseController(IExpenseFacade expenseFacade) : ApiControllerBase
     }
 
     [HttpGet("GetByDateRange")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     public ActionResult<List<ExpenseDto>> GetByDateRange(DateTime startDate, DateTime endDate)
     {
         var userId = GetUserId();
@@ -58,6 +74,7 @@ public class ExpenseController(IExpenseFacade expenseFacade) : ApiControllerBase
     }
 
     [HttpGet("GetByAmountRange")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     public ActionResult<List<ExpenseDto>> GetByAmountRange(decimal minAmount, decimal maxAmount)
     {
         var userId = GetUserId();

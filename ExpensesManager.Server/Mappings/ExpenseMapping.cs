@@ -13,12 +13,11 @@ public static class ExpenseMapping
             Amount = expense.Amount,
             Description = expense.Description,
             Date = expense.Date,
-            UserId = expense.UserId,
             CategoryId = expense.CategoryId
         };
     }
 
-    public static Expense ToExpense(ExpenseDto expenseDto)
+    public static Expense ToExpense(ExpenseDto expenseDto, string userId)
     {
         return new Expense
         {
@@ -26,7 +25,7 @@ public static class ExpenseMapping
             Amount = expenseDto.Amount,
             Description = expenseDto.Description,
             Date = expenseDto.Date,
-            UserId = expenseDto.UserId,
+            UserId = userId,
             CategoryId = expenseDto.CategoryId
         };
     }
