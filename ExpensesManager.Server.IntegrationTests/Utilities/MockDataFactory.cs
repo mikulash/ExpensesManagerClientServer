@@ -1,4 +1,6 @@
-﻿using ExpensesManager.Server.DTOs.Auth;
+﻿using ExpensesManager.Server.DTOs;
+using ExpensesManager.Server.DTOs.Auth;
+using ExpensesManager.Server.Mappings;
 using ExpensesManager.Server.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -95,5 +97,18 @@ public static class MockDataFactory
         };
 
         return categories;
+    }
+
+    public static UserImportDataDto CreateUserDataForImport(string userId)
+    {
+        var categories = CreateCategories(userId).Select(CategoryMapping.ToCategoryDto).ToList();
+        var incomes = CreateIncomes(userId, categories[2].Id).Select(IncomeMapping.ToIncomeDto).ToList();
+        var expenses = CreateExpenses(userId, categories[0].Id).Select(ExpenseMapping.ToExpenseDto).ToList();
+        return new UserImportDataDto
+        {
+            Categories = categories,
+            Incomes = incomes,
+            Expenses = expenses
+        };
     }
 }

@@ -18,13 +18,17 @@ public interface IUserFacade
         DateTime? dateFrom, DateTime? dateTo);
 
     FacadeResponse<UserTransactionsDto> GetAllTransactions(string userId);
-    FacadeResponse<bool> ImportData(UserTransactionsDto transactions, string userId);
+    FacadeResponse<bool> ImportData(UserImportDataDto transactions, string userId);
     FacadeResponse<UserStatisticsDto> GetStatistics(string userId);
     FacadeResponse<bool> DeleteAllTransactions(string userId);
     FacadeResponse<FileStreamResult> GetStatsGraph(string userId);
 }
 
-public class UserFacade(IUserService userService, IIncomeService incomeService, IExpenseService expenseService)
+public class UserFacade(
+    IUserService userService,
+    IIncomeService incomeService,
+    IExpenseService expenseService,
+    ICategoryService categoryService)
     : IUserFacade
 {
     private const string invalidUserIdMessage = "User ID cannot be 0.";
@@ -117,18 +121,39 @@ public class UserFacade(IUserService userService, IIncomeService incomeService, 
         return retval.SetOk(userTransactions);
     }
 
-    public FacadeResponse<bool> ImportData(UserTransactionsDto transactions, string userId)
+    public FacadeResponse<bool> ImportData(UserImportDataDto transactions, string userId)
     {
         var retval = new FacadeResponse<bool>();
         if (userId.IsNullOrEmpty()) return retval.SetUnauthorized(invalidUserIdMessage);
 
-        var incomes = transactions.Incomes.Select(i => IncomeMapping.ToIncome(i, userId)).ToList();
-        var expenses = transactions.Expenses.Select(e => ExpenseMapping.ToExpense(e, userId)).ToList();
+        var categoryMap = new Dictionary<int, int>();
+        foreach (var categoryDto in transactions.Categories)
+        {
+            //cannot use clients category ids, use them to entity ones
+            var category = CategoryMapping.ToCategory(categoryDto, userId);
+            var insertionSuccess = categoryService.SetCategory(category);
+            if (!insertionSuccess) return retval.SetBadRequest("Error inserting category");
+            categoryMap[categoryDto.Id] = category.Id;
+        }
+
+        var incomes = transactions.Incomes.Select(i =>
+        {
+            var income = IncomeMapping.ToIncome(i, userId);
+            income.CategoryId = categoryMap[i.CategoryId];
+            return income;
+        }).ToList();
+
+        var expenses = transactions.Expenses.Select(e =>
+        {
+            var expense = ExpenseMapping.ToExpense(e, userId);
+            expense.CategoryId = categoryMap[e.CategoryId];
+            return expense;
+        }).ToList();
 
         var incomeResult = incomeService.SetIncomes(incomes);
         var expenseResult = expenseService.SetExpenses(expenses);
 
-        return retval.SetOk(incomeResult && expenseResult);
+        return retval.SetOk(incomeResult && expenseResult && categoryMap.Count == transactions.Categories.Count);
     }
 
     public FacadeResponse<UserStatisticsDto> GetStatistics(string userId)

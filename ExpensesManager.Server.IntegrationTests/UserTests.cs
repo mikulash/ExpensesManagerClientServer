@@ -149,9 +149,29 @@ public class UserTests : AuthenticatedBaseTest
         Assert.True(totalExpenseResponse == 0);
     }
 
+    [Fact]
+    public async Task ImportUserData()
+    {
+        var userImportData = MockDataFactory.CreateUserDataForImport(User.UserId);
+        var response = await Client.PostAsJsonAsync("api/User/ImportData", userImportData);
+        Assert.True(response.IsSuccessStatusCode);
 
+        var totalExpenseResponse = await Client.GetFromJsonAsync<decimal>("api/User/TotalExpense");
+        Assert.True(totalExpenseResponse > 0);
 
+        var incomesResponse = await Client.GetFromJsonAsync<List<IncomeDto>>("/api/Income/GetAll");
+        Assert.NotNull(incomesResponse);
+        Assert.NotEmpty(incomesResponse);
+        Assert.Contains(incomesResponse, i => userImportData.Incomes.Exists(ui => ui.Amount == i.Amount));
 
+        var expensesResponse = await Client.GetFromJsonAsync<List<ExpenseDto>>("/api/Expense/GetAll");
+        Assert.NotNull(expensesResponse);
+        Assert.NotEmpty(expensesResponse);
+        Assert.Contains(expensesResponse, e => userImportData.Expenses.Exists(ui => ui.Amount == e.Amount));
 
-
+        var categoriesResponse = await Client.GetFromJsonAsync<List<CategoryDto>>("/api/Category/GetAll");
+        Assert.NotNull(categoriesResponse);
+        Assert.NotEmpty(categoriesResponse);
+        Assert.Contains(categoriesResponse, c => userImportData.Categories.Exists(ui => ui.Name == c.Name));
+    }
 }

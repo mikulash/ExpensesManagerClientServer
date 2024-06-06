@@ -69,7 +69,7 @@ public class UserController(IUserFacade userFacade) : ApiControllerBase
 
     [HttpPost("ImportData")]
     [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-    public ActionResult<bool> ImportData(UserTransactionsDto userTransactionsDto)
+    public ActionResult<bool> ImportData(UserImportDataDto userTransactionsDto)
     {
         var userId = GetUserId();
         var retval = userFacade.ImportData(userTransactionsDto, userId);
