@@ -26,7 +26,6 @@ public class IncomeFacade(IIncomeService incomeService) : IIncomeFacade
         var incomesDto = incomes.Select(IncomeMapping.ToIncomeDto).ToList();
 
         return retval.SetOk(incomesDto);
-
     }
 
     public FacadeResponse<IncomeDto> GetIncomeById(int incomeId, string userId)
@@ -38,7 +37,6 @@ public class IncomeFacade(IIncomeService incomeService) : IIncomeFacade
         var incomeDto = IncomeMapping.ToIncomeDto(income);
 
         return retval.SetOk(incomeDto);
-
     }
 
     public FacadeResponse<IncomeDto> SetIncome(IncomeDto incomeDto, string userId)

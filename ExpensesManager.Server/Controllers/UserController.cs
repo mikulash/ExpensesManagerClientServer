@@ -1,7 +1,6 @@
 ﻿using ExpensesManager.Server.DTOs;
 using ExpensesManager.Server.Facades;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpensesManager.Server.Controllers;
@@ -9,9 +8,10 @@ namespace ExpensesManager.Server.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class UserController(IUserFacade userFacade, UserManager<IdentityUser> userManager) : ApiControllerBase
+public class UserController(IUserFacade userFacade) : ApiControllerBase
 {
     [HttpGet]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     public ActionResult<UserDto> GetUser()
     {
         var userId = GetUserId();
@@ -20,6 +20,7 @@ public class UserController(IUserFacade userFacade, UserManager<IdentityUser> us
     }
 
     [HttpGet("Balance")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     public ActionResult<decimal> GetCurrentUserBalance()
     {
         var userId = GetUserId();
@@ -28,6 +29,7 @@ public class UserController(IUserFacade userFacade, UserManager<IdentityUser> us
     }
 
     [HttpGet("TotalIncome")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     public ActionResult<decimal> GetTotalIncome()
     {
         var userId = GetUserId();
@@ -36,6 +38,7 @@ public class UserController(IUserFacade userFacade, UserManager<IdentityUser> us
     }
 
     [HttpGet("TotalExpense")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     public ActionResult<decimal> GetTotalExpense()
     {
         var userId = GetUserId();
@@ -44,6 +47,7 @@ public class UserController(IUserFacade userFacade, UserManager<IdentityUser> us
     }
 
     [HttpGet("FilteredTransactions")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     public ActionResult<UserTransactionsDto> GetFilteredExpenses(
         [FromQuery] List<int>? categories = null,
         [FromQuery] DateTime? dateFrom = null,
@@ -55,6 +59,7 @@ public class UserController(IUserFacade userFacade, UserManager<IdentityUser> us
     }
 
     [HttpGet("ExportData")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     public ActionResult<UserTransactionsDto> ExportData()
     {
         var userId = GetUserId();
@@ -63,6 +68,7 @@ public class UserController(IUserFacade userFacade, UserManager<IdentityUser> us
     }
 
     [HttpPost("ImportData")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
     public ActionResult<bool> ImportData(UserTransactionsDto userTransactionsDto)
     {
         var userId = GetUserId();
@@ -71,6 +77,7 @@ public class UserController(IUserFacade userFacade, UserManager<IdentityUser> us
     }
 
     [HttpGet("Statistics")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     public ActionResult<UserStatisticsDto> GetStatistics()
     {
         var userId = GetUserId();
@@ -79,6 +86,7 @@ public class UserController(IUserFacade userFacade, UserManager<IdentityUser> us
     }
 
     [HttpGet("StatsGraph")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
     public ActionResult<MemoryStream> GetStatsGraph()
     {
         var userId = GetUserId();
@@ -87,6 +95,7 @@ public class UserController(IUserFacade userFacade, UserManager<IdentityUser> us
     }
 
     [HttpDelete("DeleteAll")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
     public ActionResult<bool> DeleteAll()
     {
         var userId = GetUserId();
