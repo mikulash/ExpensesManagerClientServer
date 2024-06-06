@@ -22,6 +22,8 @@ public interface IUserFacade
     FacadeResponse<UserStatisticsDto> GetStatistics(string userId);
     FacadeResponse<bool> DeleteAllTransactions(string userId);
     FacadeResponse<FileStreamResult> GetStatsGraph(string userId);
+    FacadeResponse<bool> BackupUserData(UserImportDataDto data, string userId);
+    FacadeResponse<bool> RestoreUserData(string userId);
 }
 
 public class UserFacade(
@@ -181,5 +183,15 @@ public class UserFacade(
         if (statsGraph == null) return retval.SetNotFound("No data to display");
         var file = new FileStreamResult(statsGraph, "image/png");
         return retval.SetOk(file);
+    }
+
+    public FacadeResponse<bool> BackupUserData(UserImportDataDto data, string userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public FacadeResponse<bool> RestoreUserData(string userId)
+    {
+        throw new NotImplementedException();
     }
 }

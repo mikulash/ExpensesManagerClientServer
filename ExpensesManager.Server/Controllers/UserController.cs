@@ -103,4 +103,23 @@ public class UserController(IUserFacade userFacade) : ApiControllerBase
         return FacadeResponseToActionResult(retval);
     }
 
+    [HttpPost("Backup")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
+    public ActionResult<bool> BackupUserData(UserImportDataDto data)
+    {
+        var userId = GetUserId();
+        var retval = userFacade.BackupUserData(data, userId);
+        return FacadeResponseToActionResult(retval);
+    }
+
+    [HttpPost("Restore")]
+    [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
+    public ActionResult<bool> RestoreUserData()
+    {
+        var userId = GetUserId();
+        var retval = userFacade.RestoreUserData(userId);
+        return FacadeResponseToActionResult(retval);
+    }
+
+
 }

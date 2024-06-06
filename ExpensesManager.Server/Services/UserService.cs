@@ -15,6 +15,8 @@ public interface IUserService
     MemoryStream? GetStatsGraph(string userId);
     void InitNewUser(string userId);
     UserDto? GetUser(string userId);
+    bool BackupUserData(UserImportDataDto data, string userId);
+    bool RestoreUserData(string userId);
 }
 
 public class UserService(
@@ -35,6 +37,16 @@ public class UserService(
             Username = user.UserName,
             Email = user.Email
         };
+    }
+
+    public bool BackupUserData(UserImportDataDto data, string userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool RestoreUserData(string userId)
+    {
+        throw new NotImplementedException();
     }
 
     public decimal GetCurrentBalance(string userId)
