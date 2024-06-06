@@ -12,19 +12,11 @@ namespace ExpensesManager.Server.Controllers;
 public class UserController(IUserFacade userFacade, UserManager<IdentityUser> userManager) : ApiControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<UserDto>> GetUser()
+    public ActionResult<UserDto> GetUser()
     {
         var userId = GetUserId();
-
-        var user = await userManager.FindByIdAsync(userId);
-        if (user == null) return NotFound(new { Success = false, Message = "User not found" });
-
-        var userResponse = new UserDto
-        {
-            UserId = userId, Username = user.UserName, Email = user.Email
-        };
-
-        return Ok(userResponse);
+        var retval = userFacade.GetUser(userId);
+        return FacadeResponseToActionResult(retval);
     }
 
     [HttpGet("Balance")]

@@ -1,4 +1,5 @@
 ﻿using ExpensesManager.Server.DTOs;
+using Microsoft.AspNetCore.Identity;
 
 namespace ExpensesManager.Server.Services;
 
@@ -9,11 +10,29 @@ public interface IUserService
     decimal GetTotalExpense(string userId);
     UserStatisticsDto GetStatistics(string userId);
     void InitNewUser(string userId);
+    UserDto? GetUser(string userId);
 }
 
-public class UserService(IIncomeService incomeService, IExpenseService expenseService, ICategoryService categoryService)
+public class UserService(
+    IIncomeService incomeService,
+    IExpenseService expenseService,
+    ICategoryService categoryService,
+    UserManager<IdentityUser> userManager)
     : IUserService
 {
+    public UserDto? GetUser(string userId)
+    {
+        var user = userManager.FindByIdAsync(userId).Result;
+        if (user == null) return null;
+
+        return new UserDto
+        {
+            UserId = userId,
+            Username = user.UserName,
+            Email = user.Email
+        };
+    }
+
     public decimal GetCurrentBalance(string userId)
     {
         var incomes = incomeService.GetAllIncomesByUser(userId);
@@ -87,5 +106,4 @@ public class UserService(IIncomeService incomeService, IExpenseService expenseSe
         var categories = CategoryService.CreateDefaultCategories(userId);
         categoryService.SetCategories(categories);
     }
-
 }

@@ -4,6 +4,9 @@ using System.Linq;
 using ExpensesManager.Server.Models;
 using ExpensesManager.Server.Services;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
@@ -23,8 +26,25 @@ public class UserServiceTests
         _incomeServiceMock = new Mock<IIncomeService>();
         _expenseServiceMock = new Mock<IExpenseService>();
         _categoryServiceMock = new Mock<ICategoryService>();
+
+        // necessary dependencies for user manager
+        var store = new Mock<IUserStore<IdentityUser>>();
+        var options = new Mock<IOptions<IdentityOptions>>();
+        var passwordHasher = new Mock<IPasswordHasher<IdentityUser>>();
+        var userValidators = new List<IUserValidator<IdentityUser>> { new Mock<IUserValidator<IdentityUser>>().Object };
+        var passwordValidators = new List<IPasswordValidator<IdentityUser>>
+            { new Mock<IPasswordValidator<IdentityUser>>().Object };
+        var keyNormalizer = new Mock<ILookupNormalizer>();
+        var errors = new Mock<IdentityErrorDescriber>();
+        var services = new Mock<IServiceProvider>();
+        var logger = new Mock<ILogger<UserManager<IdentityUser>>>();
+
+        var userManagerMock = new Mock<UserManager<IdentityUser>>(
+            store.Object, options.Object, passwordHasher.Object, userValidators, passwordValidators,
+            keyNormalizer.Object, errors.Object, services.Object, logger.Object);
+
         _userService = new UserService(_incomeServiceMock.Object, _expenseServiceMock.Object,
-            _categoryServiceMock.Object);
+            _categoryServiceMock.Object, userManagerMock.Object);
     }
 
     [Fact]

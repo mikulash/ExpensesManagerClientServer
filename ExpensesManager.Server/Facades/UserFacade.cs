@@ -11,10 +11,10 @@ namespace ExpensesManager.Server.Facades;
 
 public interface IUserFacade
 {
+    FacadeResponse<UserDto> GetUser(string userId);
     FacadeResponse<decimal> GetCurrentBalance(string userId);
     FacadeResponse<decimal> GetTotalIncome(string userId);
     FacadeResponse<decimal> GetTotalExpense(string userId);
-
     FacadeResponse<UserTransactionsDto> GetFilteredTransactions(string userId, List<int>? categoryIds,
         DateTime? dateFrom, DateTime? dateTo);
 
@@ -28,8 +28,16 @@ public interface IUserFacade
 public class UserFacade(IUserService userService, IIncomeService incomeService, IExpenseService expenseService)
     : IUserFacade
 {
-    private readonly string invalidUserIdMessage = "User ID cannot be 0.";
+    private const string invalidUserIdMessage = "User ID cannot be 0.";
 
+    public FacadeResponse<UserDto> GetUser(string userId)
+    {
+        var retval = new FacadeResponse<UserDto>();
+        if (userId.IsNullOrEmpty()) return retval.SetUnauthorized(invalidUserIdMessage);
+        var user = userService.GetUser(userId);
+        if (user == null) return retval.SetNotFound("User not found.");
+        return retval.SetOk(user);
+    }
     public FacadeResponse<decimal> GetCurrentBalance(string userId)
     {
         var retval = new FacadeResponse<decimal>();
