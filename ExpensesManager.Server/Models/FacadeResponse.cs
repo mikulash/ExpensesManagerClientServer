@@ -32,28 +32,28 @@ public class FacadeResponse<T> where T : notnull
 
     public FacadeResponse<T> SetBadRequest(string message)
     {
-        StatusCode = 400;
+        StatusCode = StatusCodes.Status400BadRequest;
         Message = message;
         return this;
     }
 
     public FacadeResponse<T> SetServerError(string message)
     {
-        StatusCode = 500;
+        StatusCode = StatusCodes.Status500InternalServerError;
         Message = message;
         return this;
     }
 
     public FacadeResponse<T> SetNotFound(string message)
     {
-        StatusCode = 404;
+        StatusCode = StatusCodes.Status404NotFound;
         Message = message;
         return this;
     }
 
     public FacadeResponse<T> SetForbidden(string message)
     {
-        StatusCode = 403;
+        StatusCode = StatusCodes.Status403Forbidden;
         Message = message;
         return this;
     }

@@ -8,7 +8,17 @@ public class ApiControllerBase : ControllerBase
 {
     protected ActionResult<T> FacadeResponseToActionResult<T>(FacadeResponse<T> response) where T : notnull
     {
-        return response.IsSuccess ? Ok(response.Value) : StatusCode(response.StatusCode, response.Message);
+        if (response.IsSuccess) return Ok(response.Value);
+        if (response.StatusCode == StatusCodes.Status400BadRequest) return BadRequest(response.Message);
+        if (response.StatusCode == StatusCodes.Status403Forbidden)
+        {
+            HttpContext.Response.Headers.Append("X-Error-Message", response.Message);
+            return Forbid();
+        }
+
+        if (response.StatusCode == StatusCodes.Status404NotFound) return NotFound(response.Message);
+
+        return StatusCode(response.StatusCode, response.Message);
     }
 
     protected string GetUserId()
