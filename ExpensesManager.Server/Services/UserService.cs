@@ -121,7 +121,6 @@ public class UserService(
         var balancePerMonth = userStatistics.BalancePerMonth.Select(b => b.Total).Select(i => (double)i).ToArray();
 
         Category10 palette = new();
-
         var bars = new List<Bar>();
 
         for (var i = 0; i < months.Length; i++)
