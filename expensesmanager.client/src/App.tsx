@@ -8,11 +8,9 @@ function App() {
             <h1 id="tabelLabel">Weather forecast</h1>
             <p>This component demonstrates fetching data from the server.</p>
             <div> heelo world</div>
-            <Button>Clissck me</Button>
-            <Link to={"login"}>login</Link>
+            <Button><Link to={"login"}>login</Link></Button>
         </div>
     );
-
 }
 
 export default App;
