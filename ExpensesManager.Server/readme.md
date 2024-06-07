@@ -25,10 +25,7 @@ username: 'seededUser'
 password: 'SeededUser123!'
 for more info see `Data/DbInitializer.cs`
 
-## how to
+## how to run tests
 
-update db
-
-1. cd ExpensesManager.Server
-2. dotnet ef migrations add XXX
-3. dotnet ef database update
+in ExpensesManager folder run `dotnet test`
+test coverage of ExpensesManager.Server project: **81%** 
