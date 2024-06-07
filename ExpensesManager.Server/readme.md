@@ -21,6 +21,9 @@ Uses controller -> facade -> service -> repository pattern.
 ## DB seeding
 
 on first run, the db will be seeded with one user, his default categories, some incomes and expenses
+username: 'seededUser'
+password: 'SeededUser123!'
+for more info see `Data/DbInitializer.cs`
 
 ## how to
 

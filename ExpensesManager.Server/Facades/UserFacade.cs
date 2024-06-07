@@ -131,7 +131,7 @@ public class UserFacade(
         var categoryMap = new Dictionary<int, int>();
         foreach (var categoryDto in transactions.Categories)
         {
-            //cannot use clients category ids, use them to entity ones
+            //cannot use client's category ids, use the entity ones
             var category = CategoryMapping.ToCategory(categoryDto, userId);
             var insertionSuccess = categoryService.SetCategory(category);
             if (!insertionSuccess) return retval.SetBadRequest("Error inserting category");

@@ -63,7 +63,6 @@ public class CategoryRepository(ApplicationDbContext context) : ICategoryReposit
         }
 
         return true;
-
     }
 
     public bool DeleteCategory(int categoryId, string userId)
