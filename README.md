@@ -1,0 +1,3 @@
+This project was initially developed as part of a school assignment. However, the scope of the project was expanded beyond the original requirements to incorporate additional features and technologies. The core of the project is a server-side application responsible for managing expenses, complete with integration and unit tests.
+
+The project also includes a basic frontend, which was developed primarily to gain hands-on experience with Swagger Codegen for generating JavaScript API calls. While the frontend is functional, the primary focus of this project remains on the backend architecture and testing.
