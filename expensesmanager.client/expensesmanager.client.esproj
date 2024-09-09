@@ -8,4 +8,7 @@
     <!-- Folder where production build objects will be placed -->
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist</BuildOutputFolder>
   </PropertyGroup>
+  <ItemGroup>
+    <TypeScriptConfiguration Remove="src\generatedApi\tsconfig.json" />
+  </ItemGroup>
 </Project>
